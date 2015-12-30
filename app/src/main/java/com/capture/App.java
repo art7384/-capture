@@ -53,7 +53,7 @@ public class App extends Application {
         return getSocketService();
     }
 
-    interface OnSocetServiceListner {
+    public interface OnSocetServiceListner {
         void onServiceConnected(SocketService socketService);
         void onServiceDisconnected();
     }

@@ -140,7 +140,7 @@ public class SocketService extends Service {
         context.stopService(new Intent(context, SocketService.class));
     }
 
-    private boolean send(byte[] mess){
+    public boolean send(byte[] mess){
         if(mWebSocket != null && mWebSocket.isOpen()){
             mWebSocket.send(mess);
             return true;
