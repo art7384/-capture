@@ -1,14 +1,14 @@
 package com.capture.buisneslogick.service;
 
-import android.app.Service;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.os.Build;
 
 import com.capture.App;
 import com.capture.buisneslogick.modul.ClientModul;
-import com.capture.buisneslogick.modul.GeneralModul;
 import com.capture.buisneslogick.modul.RequestModul;
 import com.capture.buisneslogick.object.RequestClientObject;
-import com.capture.buisneslogick.transport.ClientTransport;
-import com.capture.model.GeneralModel;
+import com.capture.service.SocketService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,37 +20,81 @@ import java.util.Date;
  */
 public class RequestClientService {
 
-    private String version = "0.1";
-    private String device = "";
-    private String os = "";
+    private static RequestClientService instance;
+
+    private static final String LOG_TAG = "RequestClientService";
+    private static final String COMMAND = "version";
+
+    private String versionName = null;
+    private int versionCode = 0;
+    private String device;
+    private String manufacturer;
+    private static String OS = "Android";
+    private String osVersion;
+    private int sdk;
 
     private RequestClientService(){
-
+        initDeviceData();
+        initAppData();
     }
 
-    public void isСurrent(RequestClientObject requestClientObject, OnCompliteListner onCompliteListner) throws JSONException {
+    public static RequestClientService getInstance() {
+        if(instance == null){
+            instance = new RequestClientService();
+        }
+        return instance;
+    }
+
+    /* ========== Function =========== */
+
+    public void isСurrent() throws JSONException {
+        RequestClientObject requestClient = create();
+        isСurrent(requestClient);
+    }
+
+    private void isСurrent(RequestClientObject requestClientObject) throws JSONException {
         JSONObject jsonObject = requestClientObject.toJsonObject();
-        byte[] mess = ("[0," + jsonObject.toString() + "]").getBytes();
-        App.getInstance().getSocketService().send(mess);
+        App.getInstance().send(jsonObject);
     }
 
-    public RequestClientObject create(){
+    private RequestClientObject create(){
         RequestClientObject requestClientObject = new RequestClientObject();
         ClientModul clientModul = requestClientObject.getClientModul();
         RequestModul requestModul = requestClientObject.getRequestModul();
 
         clientModul.setDevice(device);
-        clientModul.setOs(os);
-        clientModul.setVersionClient(version);
+        clientModul.setOs(osVersion);
+        clientModul.setVersionClient(versionName);
 
-        requestModul.setConnand("version");
+        requestModul.setConnand(COMMAND);
         requestModul.setIdRequest(new Date().getTime());
 
         return requestClientObject;
     }
 
-    interface OnCompliteListner{
-        void onComplite(Boolean version);
+    /* ========== Helpers =========== */
+
+    private void initDeviceData(){
+        osVersion = Build.VERSION.RELEASE;
+        sdk = Build.VERSION.SDK_INT;
+        device = Build.MODEL;
+        manufacturer = Build.MANUFACTURER;
+    }
+
+    private void initAppData(){
+        App app = App.getInstance();
+        PackageManager packageManager = app.getPackageManager();
+        String packageName = app.getPackageName();
+        PackageInfo packageInfo = null;
+        try {
+            packageInfo = packageManager.getPackageInfo(packageName, 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        if(packageInfo == null) return;
+
+        versionName = packageInfo.versionName;
+        versionCode = packageInfo.versionCode;
     }
 
 }

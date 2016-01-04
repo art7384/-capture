@@ -4,11 +4,13 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.capture.App;
 import com.koushikdutta.async.ByteBufferList;
 import com.koushikdutta.async.DataEmitter;
 import com.koushikdutta.async.callback.CompletedCallback;
@@ -23,7 +25,8 @@ import com.koushikdutta.async.http.WebSocket;
 public class SocketService extends Service {
 
     private static final String LOG_TAG = "SocketService";
-    private static final String EXTRA_URL = "extra_url";
+//    private static final String EXTRA_URL = "extra_url";
+    private static final String SOCKET_URL = "http://game.4zdev.ru:8090";
     private OnSocketListner mOnSocketListner = null;
     private WebSocket mWebSocket = null;
     private Handler mHandler;
@@ -33,6 +36,9 @@ public class SocketService extends Service {
         @Override
         public void onStringAvailable(String s) {
             Log.d(LOG_TAG, "I got a string: " + s);
+            if(mOnSocketListner != null){
+                mOnSocketListner.onStringAvailable(s);
+            }
         }
     };
 
@@ -114,15 +120,10 @@ public class SocketService extends Service {
         mHandler = new Handler();
     }
 
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(LOG_TAG, "onStartCommand");
-
-        String url = intent.getStringExtra(EXTRA_URL);
-        startSocet(url);
-
-        return super.onStartCommand(intent, flags, startId);
-    }
+//    @Override
+//    public int onStartCommand(Intent intent, int flags, int startId) {
+//        return super.onStartCommand(intent, flags, startId);
+//    }
 
     @Override
     public void onDestroy() {
@@ -130,12 +131,32 @@ public class SocketService extends Service {
         Log.d(LOG_TAG, "onDestroy");
     }
 
-    static public void start(Context context, String url){
-        stop(context);
-        Intent intent = new Intent(context, SocketService.class);
-        intent.putExtra(EXTRA_URL, url);
-        context.startService(intent);
+    public boolean isConnect(){
+        if(mWebSocket == null) return false;
+        return mWebSocket.isOpen();
     }
+
+    public void connect(){
+        disconnect();
+        AsyncHttpGet get = new AsyncHttpGet(SOCKET_URL);
+        get.addHeader("os", "Android");
+        get.addHeader("os-version", Build.VERSION.RELEASE);
+        get.addHeader("sdk", "" + Build.VERSION.SDK_INT);
+        get.addHeader("model", Build.MODEL);
+        get.addHeader("manufacturer", Build.MANUFACTURER);
+        get.addHeader("app-version-name", App.getInstance().getPackageInfo().versionName);
+        get.addHeader("app-version-code", "" + App.getInstance().getPackageInfo().versionCode);
+        get.addHeader("tocken", null);
+        AsyncHttpClient.getDefaultInstance().websocket(get, "http", mWebSocketConnectCallback);
+    }
+
+    public void disconnect(){
+        if(mWebSocket != null){
+            mWebSocket.close();
+            mWebSocket = null;
+        }
+    }
+
     static public void stop(Context context) {
         context.stopService(new Intent(context, SocketService.class));
     }
@@ -148,12 +169,6 @@ public class SocketService extends Service {
         return false;
     }
 
-    private void startSocet(String url) {
-        AsyncHttpGet get = new AsyncHttpGet(url);
-        //get.addHeader("X-token", "tocken");
-        AsyncHttpClient.getDefaultInstance().websocket(get, "http", mWebSocketConnectCallback);
-    }
-
     public void setOnSocketListner(OnSocketListner onSocketListner){
         mOnSocketListner = onSocketListner;
     }
@@ -162,6 +177,7 @@ public class SocketService extends Service {
         void onConnect();
         void onCompleted(Exception e);
         void onDataAvailable(DataEmitter emitter, ByteBufferList bb);
+        void onStringAvailable(String s);
         void onErrorConnect(Exception e);
     }
 

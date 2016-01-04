@@ -1,20 +1,26 @@
 package com.capture.presentation;
 
 import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.widget.TextView;
 
 import com.capture.App;
 import com.capture.R;
+import com.capture.buisneslogick.service.RequestClientService;
 import com.capture.service.SocketService;
+
+import org.json.JSONException;
 
 /**
  * Created by artem on 29.12.15.
  */
-public class SplashActivity extends Activity implements App.OnSocetServiceListner {
+public class SplashActivity extends Activity {
 
     private TextView mTextStatus;
-    private SocketService mSocketService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,21 +31,12 @@ public class SplashActivity extends Activity implements App.OnSocetServiceListne
 
         mTextStatus.setText(getString(R.string.сonnection));
 
-
-        mSocketService = App.getInstance().setOnSocetServiceListner(this);
-
-    }
-
-    // OnSocetServiceListner
-
-    @Override
-    public void onServiceConnected(SocketService socketService) {
-        mSocketService = socketService;
-    }
-
-    @Override
-    public void onServiceDisconnected() {
+        try {
+            RequestClientService.getInstance().isСurrent();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
     }
-    // End OnSocetServiceListner
+
 }
