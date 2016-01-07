@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".App"
+        android:name=".AppSoket"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -14,15 +14,21 @@
         <activity
             android:name=".presentation.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:alwaysRetainTaskState="true"/>
+        <activity
+            android:name=".presentation.connect.ConnectActivity"
+            android:label="@string/app_name"/>
 
         <activity
-            android:name=".presentation.SplashActivity"
+            android:name=".presentation.menu.registration.RegistrationActivity"
+            android:label="@string/title_registration"/>
+
+        <activity
+            android:name=".presentation.splash.SplashActivity"
             android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

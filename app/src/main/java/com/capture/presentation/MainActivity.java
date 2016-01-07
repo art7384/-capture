@@ -1,5 +1,9 @@
 package com.capture.presentation;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -9,9 +13,14 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.capture.AppSoket;
 import com.capture.R;
+import com.capture.presentation.common.BaseActivity;
+import com.capture.presentation.connect.ConnectActivity;
+import com.capture.presentation.helper.DialogFactory;
+import com.capture.presentation.menu.registration.RegistrationActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +37,17 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+
+
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        if(!AppSoket.getInstance().isConnect()){
+            showDialogDisconnect(getString(R.string.socket_status_noсonnect));
+        }
     }
 
     @Override
@@ -44,11 +64,42 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+
+        switch (id) {
+            case R.id.action_settings: {
+
+                return true;
+            }
+            case R.id.action_authorization: {
+
+                return true;
+            }
+            case R.id.action_registration: {
+                startActivity(new Intent(this, RegistrationActivity.class));
+                return true;
+            }
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+    /* ====== implements BaseActivity ===== */
+
+    @Override
+    protected void onComplited(String mess){
+        super.onComplited(mess);
+        showDialogDisconnect(mess);
+    }
+
+    /* ====== FUNCTION ===== */
+    private void showDialogDisconnect(String mess){
+        DialogFactory.showError(this, mess, new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(new Intent(MainActivity.this, ConnectActivity.class));
+                finish();
+            }
+        });
+    }
+
 }

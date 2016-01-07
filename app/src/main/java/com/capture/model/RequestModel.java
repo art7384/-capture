@@ -6,4 +6,6 @@ package com.capture.model;
 public class RequestModel {
     public String command = null;
     public long idRequest = -1;
+    public String text = null;
+    public int status = -1;
 }

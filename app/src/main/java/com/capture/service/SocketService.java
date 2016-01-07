@@ -10,7 +10,7 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.capture.App;
+import com.capture.AppSoket;
 import com.koushikdutta.async.ByteBufferList;
 import com.koushikdutta.async.DataEmitter;
 import com.koushikdutta.async.callback.CompletedCallback;
@@ -25,7 +25,6 @@ import com.koushikdutta.async.http.WebSocket;
 public class SocketService extends Service {
 
     private static final String LOG_TAG = "SocketService";
-//    private static final String EXTRA_URL = "extra_url";
     private static final String SOCKET_URL = "http://game.4zdev.ru:8090";
     private OnSocketListner mOnSocketListner = null;
     private WebSocket mWebSocket = null;
@@ -35,7 +34,7 @@ public class SocketService extends Service {
     private WebSocket.StringCallback mStringCallbacknew = new WebSocket.StringCallback() {
         @Override
         public void onStringAvailable(String s) {
-            Log.d(LOG_TAG, "I got a string: " + s);
+            Log.d(LOG_TAG, "RECEIVING: " + s);
             if(mOnSocketListner != null){
                 mOnSocketListner.onStringAvailable(s);
             }
@@ -139,14 +138,14 @@ public class SocketService extends Service {
     public void connect(){
         disconnect();
         AsyncHttpGet get = new AsyncHttpGet(SOCKET_URL);
-        get.addHeader("os", "Android");
-        get.addHeader("os-version", Build.VERSION.RELEASE);
-        get.addHeader("sdk", "" + Build.VERSION.SDK_INT);
-        get.addHeader("model", Build.MODEL);
-        get.addHeader("manufacturer", Build.MANUFACTURER);
-        get.addHeader("app-version-name", App.getInstance().getPackageInfo().versionName);
-        get.addHeader("app-version-code", "" + App.getInstance().getPackageInfo().versionCode);
-        get.addHeader("tocken", null);
+        //get.addHeader("os", "Android");
+        //get.addHeader("os-version", Build.VERSION.RELEASE);
+        //get.addHeader("sdk", "" + Build.VERSION.SDK_INT);
+        //get.addHeader("model", Build.MODEL);
+        //get.addHeader("manufacturer", Build.MANUFACTURER);
+        get.addHeader("app-version-name", AppSoket.getInstance().getPackageInfo().versionName);
+        get.addHeader("app-version-code", "" + AppSoket.getInstance().getPackageInfo().versionCode);
+        get.addHeader("token", null);
         AsyncHttpClient.getDefaultInstance().websocket(get, "http", mWebSocketConnectCallback);
     }
 
@@ -161,7 +160,7 @@ public class SocketService extends Service {
         context.stopService(new Intent(context, SocketService.class));
     }
 
-    public boolean send(byte[] mess){
+    public boolean send(String mess){
         if(mWebSocket != null && mWebSocket.isOpen()){
             mWebSocket.send(mess);
             return true;
