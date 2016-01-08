@@ -11,7 +11,7 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.capture.buisneslogick.object.RequestServerObject;
-import com.capture.buisneslogick.parser.ParserRequestServerObject;
+import com.capture.buisneslogick.convector.parser.object.ParserRequestServerObject;
 import com.capture.service.SocketService;
 import com.koushikdutta.async.ByteBufferList;
 import com.koushikdutta.async.DataEmitter;
@@ -75,12 +75,12 @@ public class AppSoket extends Application implements SocketService.OnSocketListn
         return packageInfo;
     }
 
-    public boolean isConnect(){
-        if(mSocketService == null) return false;
+    public boolean isConnect() {
+        if (mSocketService == null) return false;
         return mSocketService.isConnect();
     }
 
-    public void connectSocet(){
+    public void connectSocet() {
         mSocketService.connect();
     }
 
@@ -100,7 +100,7 @@ public class AppSoket extends Application implements SocketService.OnSocketListn
             if (mSocketService.isConnect()) {
                 if (mMessagesList.size() > 0) {
                     JSONArray jsArr = new JSONArray();
-                    jsArr.put(0,0);
+                    jsArr.put(0, 0);
                     while (mMessagesList.size() > 0) {
                         jsArr.put(mMessagesList.remove(0));
                     }
@@ -132,7 +132,7 @@ public class AppSoket extends Application implements SocketService.OnSocketListn
     public void onCompleted(Exception e) {
         Intent intent = new Intent();
         intent.putExtra(KeyExtra.MESSAGE.toString(), e.getMessage());
-        intent.putExtra(KeyExtra.COMMAND.toString(),KeyEvent.COMPLITED);
+        intent.putExtra(KeyExtra.COMMAND.toString(), KeyEvent.COMPLITED);
         sendOrderedBroadcast(intent, KeyBroadcast.SOCET_UPDATE);
     }
 
@@ -152,10 +152,10 @@ public class AppSoket extends Application implements SocketService.OnSocketListn
             e.printStackTrace();
         }
         // сообщение должен быть json массив
-        if(jsArr == null) return;
+        if (jsArr == null) return;
 
-// бежим по массиву
-        for (int i = 0; i < jsArr.length(); i++){
+        // бежим по массиву
+        for (int i = 0; i < jsArr.length(); i++) {
             JSONObject jsObj = null;
             try {
                 jsObj = jsArr.getJSONObject(i);
@@ -163,16 +163,16 @@ public class AppSoket extends Application implements SocketService.OnSocketListn
                 e.printStackTrace();
             }
             // массив состоит из json объектов (моделей)
-            if(jsObj != null){
+            if (jsObj != null) {
                 try {
                     // json объект может быть либо ответом, либо запросом
                     RequestServerObject requestServerObject = ParserRequestServerObject.pars(jsObj);
-                    if(requestServerObject != null) {
+                    if (requestServerObject != null) {
                         long idRequest = requestServerObject.getRequestModul().getIdRequest();
                         OnCompliteListern listern = mListner.remove(idRequest);
-                        if(listern != null){
+                        if (listern != null) {
                             // отправляем ответ на обработку
-                            listern.onComplite(s);
+                            listern.onComplite(s, requestServerObject);
                         }
                     } else {
                         // TODO: последующая оюработка ответа
@@ -197,18 +197,21 @@ public class AppSoket extends Application implements SocketService.OnSocketListn
 
     /* =========== END OnSocketListner =========== */
 
-    public static class KeyBroadcast{
+    public static class KeyBroadcast {
         static public final String SOCET_UPDATE = "com.capture.SOCET_UPDATE";
         static public final String SOCET_MESSAGE = "com.capture.SOCET_MESSAGE";
     }
-    public enum KeyExtra{
+
+    public enum KeyExtra {
         COMMAND("command"),
         MESSAGE("message");
         String key;
-        KeyExtra(String key){
+
+        KeyExtra(String key) {
             this.key = key;
         }
-        public String toString(){
+
+        public String toString() {
             return key;
         }
     }
@@ -222,20 +225,26 @@ public class AppSoket extends Application implements SocketService.OnSocketListn
 
      /* =========== EVENT =========== */
 
-    public interface OnCompliteListern{
-        void onComplite(String s);
+    public interface OnCompliteListern {
+        void onComplite(String s, RequestServerObject requestServerObject);
     }
 
     private class OldRequest implements Runnable {
         private long idRequest;
-        OldRequest(long id){
+
+        OldRequest(long id) {
             idRequest = id;
         }
+
         @Override
         public void run() {
             OnCompliteListern listern = mListner.remove(idRequest);
-            if(listern != null){
-                listern.onComplite(null);
+            if (listern != null) {
+                RequestServerObject request = new RequestServerObject();
+                request.getRequestModul().setIdRequest(idRequest);
+                request.getRequestModul().setStatus(408);
+                request.getRequestModul().setText("Request Timeout");
+                listern.onComplite(null, request);
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.capture.buisneslogick.parser;
+package com.capture.buisneslogick.convector.parser.models;
 
 import com.capture.model.RequestModel;
 

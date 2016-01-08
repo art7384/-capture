@@ -20,5 +20,7 @@
     <string name="ed_hint_pass2">Repeat password</string>
 
     <string name="dialog_title_error">Error!</string>
+    <string name="dialog_email_exists">A user with this e-mail is already registered</string>
+    <string name="dialog_nickname_is_not_available">Nickname is not available</string>
 
 </resources>

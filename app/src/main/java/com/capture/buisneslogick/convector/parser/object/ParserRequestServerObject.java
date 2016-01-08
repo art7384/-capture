@@ -1,7 +1,7 @@
-package com.capture.buisneslogick.parser;
+package com.capture.buisneslogick.convector.parser.object;
 
-import com.capture.buisneslogick.modul.RequestModul;
 import com.capture.buisneslogick.object.RequestServerObject;
+import com.capture.buisneslogick.convector.parser.models.ParserRequest;
 import com.capture.model.RequestModel;
 
 import org.json.JSONException;

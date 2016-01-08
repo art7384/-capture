@@ -1,21 +1,17 @@
 package com.capture.buisneslogick.service;
 
-import com.capture.AppSoket;
-import com.capture.buisneslogick.modul.GeneralModul;
-import com.capture.buisneslogick.modul.RequestModul;
-import com.capture.buisneslogick.modul.UserModul;
 import com.capture.buisneslogick.object.RegistractionObject;
 import com.capture.buisneslogick.object.UserObject;
-import com.capture.buisneslogick.transport.RegistrationTransport;
-import com.capture.model.GeneralModel;
+import com.capture.buisneslogick.operation.user.UserSaveOperation;
+import com.capture.buisneslogick.operation.user.registration.CreateRegistractionObjectOperation;
+import com.capture.buisneslogick.operation.user.registration.RegistrationOperation;
+import com.capture.buisneslogick.service.helpers.OnCompliteListern;
+import com.capture.buisneslogick.transport.helper.OnErrorTransportListner;
 import com.capture.model.UserModel;
-import com.capture.role.Role;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.security.NoSuchAlgorithmException;
-import java.util.Date;
 
 /**
  * Created by artem on 06.01.16.
@@ -34,42 +30,22 @@ public class UserService {
         return instance;
     }
 
-    public void registration(UserModel userModel, String nick, final OnCompliteUserListner  listern) throws NoSuchAlgorithmException, JSONException {
-        RegistractionObject registractionObject = createRegistractionObject(userModel, nick);
-        RegistrationTransport.registration(registractionObject, new AppSoket.OnCompliteListern(){
+    public void registration(
+            UserModel userModel,
+            String nick,
+            final OnCompliteListern listern,
+            OnErrorTransportListner errorListner) throws NoSuchAlgorithmException, JSONException {
+
+        RegistractionObject registractionObject = CreateRegistractionObjectOperation.create(userModel, nick);
+        RegistrationOperation.registration(registractionObject, new RegistrationOperation.OnCompliteUserListner() {
             @Override
-            public void onComplite(String s) {
-                updateUser(s, listern);
+            public void onComplite(UserObject user) {
+                UserSaveOperation.save(user);
+                if (listern != null) {
+                    listern.onComplite();
+                }
             }
-        });
-    }
-
-    private void updateUser(String response, OnCompliteUserListner  listern){
-        UserObject user = new UserObject();
-        listern.onComplite(user);
-    }
-
-    private RegistractionObject createRegistractionObject(UserModel userModel, String nick) throws NoSuchAlgorithmException {
-        RegistractionObject object = new RegistractionObject();
-
-        RequestModul request = object.getRequestModul();
-        request.setConnand("create_user");
-        request.setIdRequest(new Date().getTime());
-
-        GeneralModul general = object.getGeneralModel();
-        general.setNameObject(nick);
-        general.setRole(Role.USER);
-
-        UserModul user = object.getUserModul();
-        user.setEmail(userModel.email);
-        user.setPassword(userModel.password);
-
-        return object;
-
-    }
-
-    public interface OnCompliteUserListner{
-        void onComplite(UserObject user);
+        }, errorListner);
     }
 
 }

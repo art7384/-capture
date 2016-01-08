@@ -1,5 +1,6 @@
 package com.capture.presentation.common;
 
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +16,7 @@ import com.capture.AppSoket;
 public class BaseActivity extends AppCompatActivity {
 
     private SocetCommandReceiver mReceiver = new SocetCommandReceiver();
+    private ProgressDialog progressDialog = null;
 
     @Override
     protected void onResume(){
@@ -38,6 +40,25 @@ public class BaseActivity extends AppCompatActivity {
 
     protected void  onErrorConnection(String message){
 
+    }
+
+    protected void showProgressDialog(){
+        showProgressDialog(null);
+    }
+
+    protected void showProgressDialog(String mess){
+        cancelProgressDialog();
+        progressDialog = new ProgressDialog(this);
+        if(mess != null)progressDialog.setMessage(mess);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+    }
+
+    protected void cancelProgressDialog(){
+        if(progressDialog != null){
+            progressDialog.cancel();
+        }
+        progressDialog = null;
     }
 
 

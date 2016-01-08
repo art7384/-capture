@@ -1,5 +1,6 @@
 package com.capture.presentation.menu.registration;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
@@ -8,8 +9,11 @@ import android.widget.EditText;
 
 import com.capture.AppSoket;
 import com.capture.R;
+import com.capture.buisneslogick.object.RequestServerObject;
 import com.capture.buisneslogick.object.UserObject;
 import com.capture.buisneslogick.service.UserService;
+import com.capture.buisneslogick.service.helpers.OnCompliteListern;
+import com.capture.buisneslogick.transport.helper.OnErrorTransportListner;
 import com.capture.model.UserModel;
 import com.capture.presentation.common.BaseActivity;
 import com.capture.presentation.helper.DialogFactory;
@@ -96,10 +100,35 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
         user.email = mEdEmail.getText().toString();
         String nick = mEdNick.getText().toString();
         try {
-            UserService.getInstance().registration(user, nick, new UserService.OnCompliteUserListner() {
+            showDialogDisconnect(getString(R.string.title_registration));
+            UserService.getInstance().registration(user, nick, new OnCompliteListern() {
                 @Override
-                public void onComplite(UserObject user) {
-                    //TODO
+                public void onComplite() {
+                    cancelProgressDialog();
+                    if(RegistrationActivity.this == null) return;
+
+                }
+            }, new OnErrorTransportListner() {
+                @Override
+                public void onError(RequestServerObject requestServerObject) {
+                    cancelProgressDialog();
+                    if(RegistrationActivity.this == null) return;
+                    int staus = requestServerObject.getRequestModul().getStatus();
+                    String txt = requestServerObject.getRequestModul().getText();
+                    switch (staus){
+                        case 403: {
+                            DialogFactory.showError(RegistrationActivity.this, getString(R.string.dialog_email_exists));
+                            break;
+                        }
+                        case 409: {
+                            DialogFactory.showError(RegistrationActivity.this, getString(R.string.dialog_nickname_is_not_available));
+                            break;
+                        }
+                        default: {
+                            DialogFactory.showError(RegistrationActivity.this, "" + staus + ": " + txt);
+                            break;
+                        }
+                    }
                 }
             });
         } catch (NoSuchAlgorithmException e) {
