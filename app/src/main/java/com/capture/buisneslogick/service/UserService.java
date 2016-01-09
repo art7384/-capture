@@ -72,16 +72,19 @@ public class UserService {
 
     public void exit(final OnCompliteListern listern, OnErrorTransportListner errorLiistner) throws JSONException {
         RequestObject exit = CreateRequestOperation.createExit();
-        ExitOperation.exit(exit, new OnCompliteTransportListner(){
+        ExitOperation.exit(exit, new OnCompliteTransportListner() {
 
             @Override
             public void OnComplite(String s, RequestServerObject requestServerObject) {
                 UserProfile.getInstance().exit();
-                if(listern != null){
+                if (listern != null) {
                     listern.onComplite();
                 }
             }
         }, errorLiistner);
     }
 
+    public boolean isAuthorization() {
+        return false;
+    }
 }

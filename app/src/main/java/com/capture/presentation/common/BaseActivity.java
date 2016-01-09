@@ -7,8 +7,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 
 import com.capture.AppSoket;
+import com.capture.R;
+import com.capture.presentation.avtarization.AuthorizationActivity;
+import com.capture.presentation.registration.RegistrationActivity;
 
 /**
  * Created by artem on 06.01.16.
@@ -19,43 +23,43 @@ public class BaseActivity extends AppCompatActivity {
     private ProgressDialog progressDialog = null;
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
         registerReceiver(mReceiver, new IntentFilter(AppSoket.KeyBroadcast.SOCET_UPDATE));
     }
 
     @Override
-    protected void onPause(){
+    protected void onPause() {
         super.onPause();
         unregisterReceiver(mReceiver);
     }
 
-    protected void onConnect(){
+    protected void onConnect() {
 
     }
 
-    protected void onComplited(String message){
+    protected void onComplited(String message) {
 
     }
 
-    protected void  onErrorConnection(String message){
+    protected void onErrorConnection(String message) {
 
     }
 
-    protected void showProgressDialog(){
+    protected void showProgressDialog() {
         showProgressDialog(null);
     }
 
-    protected void showProgressDialog(String mess){
+    protected void showProgressDialog(String mess) {
         cancelProgressDialog();
         progressDialog = new ProgressDialog(this);
-        if(mess != null)progressDialog.setMessage(mess);
+        if (mess != null) progressDialog.setMessage(mess);
         progressDialog.setCancelable(false);
         progressDialog.show();
     }
 
-    protected void cancelProgressDialog(){
-        if(progressDialog != null){
+    protected void cancelProgressDialog() {
+        if (progressDialog != null) {
             progressDialog.cancel();
         }
         progressDialog = null;
@@ -78,6 +82,20 @@ public class BaseActivity extends AppCompatActivity {
                 onErrorConnection(mess);
             }
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case android.R.id.home: {
+                finish();
+                return true;
+            }
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 }

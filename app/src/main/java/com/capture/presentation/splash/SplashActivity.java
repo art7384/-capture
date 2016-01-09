@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import com.capture.R;
+import com.capture.presentation.MainActivity;
 import com.capture.presentation.connect.ConnectActivity;
 
 /**
@@ -23,7 +24,7 @@ public class SplashActivity extends Activity {
         mHandler.postAtTime(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(SplashActivity.this, ConnectActivity.class));
+                startActivity(new Intent(SplashActivity.this, MainActivity.class));
                 finish();
             }
         }, 3000);

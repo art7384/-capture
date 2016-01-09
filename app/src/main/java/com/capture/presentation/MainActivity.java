@@ -4,20 +4,42 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.capture.AppSoket;
 import com.capture.R;
+import com.capture.buisneslogick.service.UserService;
+import com.capture.presentation.about.AboutActivity;
+import com.capture.presentation.avtarization.AuthorizationActivity;
 import com.capture.presentation.common.BaseActivity;
 import com.capture.presentation.connect.ConnectActivity;
 import com.capture.presentation.common.helper.DialogFactory;
+import com.capture.presentation.profile.ProfileActivity;
 import com.capture.presentation.registration.RegistrationActivity;
+import com.capture.presentation.scen.CreateScenActivity;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements View.OnClickListener {
+
+    private DialogInterface.OnClickListener onClickDialogAuthorization = new DialogInterface.OnClickListener(){
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            startActivity(new Intent(MainActivity.this, AuthorizationActivity.class));
+        }
+    };
+    private DialogInterface.OnClickListener onClickDialogRegistration = new DialogInterface.OnClickListener(){
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            startActivity(new Intent(MainActivity.this, RegistrationActivity.class));
+        }
+    };
+    private DialogInterface.OnClickListener onClickDialogCancel = new DialogInterface.OnClickListener(){
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            dialog.cancel();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,53 +48,50 @@ public class MainActivity extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.activityMain_FloatingActionButton_add);
+        fab.setOnClickListener(this);
 
 
     }
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
-        if(!AppSoket.getInstance().isConnect()){
-            showDialogDisconnect(getString(R.string.socket_status_noсonnect));
-        }
+//        if(!AppSoket.getInstance().isConnect()){
+//            showDialogDisconnect(getString(R.string.socket_status_noсonnect));
+//        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        if(UserService.getInstance().isAuthorization()){
+            getMenuInflater().inflate(R.menu.menu_main_login, menu);
+        } else {
+            getMenuInflater().inflate(R.menu.menu_main_no_login, menu);
+        }
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
 
         switch (id) {
-            case R.id.action_settings: {
-
+            case R.id.action_profile: {
+                startActivity(new Intent(this, ProfileActivity.class));
                 return true;
             }
             case R.id.action_authorization: {
-
+                startActivity(new Intent(this, AuthorizationActivity.class));
                 return true;
             }
             case R.id.action_registration: {
                 startActivity(new Intent(this, RegistrationActivity.class));
+                return true;
+            }
+            case R.id.action_about:{
+                startActivity(new Intent(this, AboutActivity.class));
                 return true;
             }
         }
@@ -83,14 +102,31 @@ public class MainActivity extends BaseActivity {
     /* ====== implements BaseActivity ===== */
 
     @Override
-    protected void onComplited(String mess){
+    protected void onComplited(String mess) {
         super.onComplited(mess);
         showDialogDisconnect(mess);
     }
 
+    /* ====== implements View.OnClickListener ===== */
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.activityMain_FloatingActionButton_add:
+                if(UserService.getInstance().isAuthorization()){
+                    startActivity(new Intent(this, CreateScenActivity.class));
+                } else {
+                    DialogFactory.showAttention(this, getString(R.string.dialog_login_or_register),
+                            getString(R.string.dialog_btn_login), onClickDialogAuthorization,
+                            getString(R.string.dialog_btn_register), onClickDialogRegistration,
+                            getString(R.string.dialog_btn_cancel), onClickDialogCancel);
+                }
+
+        }
+    }
+
     /* ====== FUNCTION ===== */
-    private void showDialogDisconnect(String mess){
-        DialogFactory.showError(this, mess, new DialogInterface.OnClickListener(){
+    private void showDialogDisconnect(String mess) {
+        DialogFactory.showError(this, mess, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 startActivity(new Intent(MainActivity.this, ConnectActivity.class));

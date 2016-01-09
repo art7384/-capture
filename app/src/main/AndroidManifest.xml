@@ -25,7 +25,15 @@
             android:label="@string/title_registration"/>
         <activity
             android:name=".presentation.avtarization.AuthorizationActivity"
-            android:label="@string/title_registration"/>
+            android:label="@string/title_authorization"/>
+        <activity android:name=".presentation.scen.CreateScenActivity"
+            android:label="@string/title_create_scen"/>
+
+        <activity android:name=".presentation.about.AboutActivity"
+            android:label="@string/title_about"/>
+
+        <activity android:name=".presentation.profile.ProfileActivity"
+            android:label="@string/title_profile"/>
 
         <activity
             android:name=".presentation.splash.SplashActivity"

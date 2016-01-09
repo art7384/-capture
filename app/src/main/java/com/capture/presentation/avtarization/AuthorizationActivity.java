@@ -2,6 +2,7 @@ package com.capture.presentation.avtarization;
 
 import android.os.Bundle;
 
+import com.capture.AppSoket;
 import com.capture.R;
 import com.capture.presentation.common.BaseActivity;
 
@@ -14,5 +15,15 @@ public class AuthorizationActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_authorization);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!AppSoket.getInstance().isConnect()) {
+            finish();
+        }
+    }
+
 }

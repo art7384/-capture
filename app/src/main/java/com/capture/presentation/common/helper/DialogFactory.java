@@ -31,4 +31,18 @@ public class DialogFactory {
         }
         return adb.show();
     }
+
+    static public AlertDialog showAttention(Context context, String message,
+                                            String btPsitiveTxt, DialogInterface.OnClickListener listenerPsitive,
+                                            String btNegativeTxt, DialogInterface.OnClickListener listenerNegative,
+                                            String btNeutralTxt, DialogInterface.OnClickListener listenerNeutral ){
+        AlertDialog.Builder adb = new AlertDialog.Builder(context);
+        adb.setTitle(R.string.dialog_title_attention);
+        adb.setMessage(message);
+        adb.setPositiveButton(btPsitiveTxt, listenerPsitive);
+        adb.setNegativeButton(btNegativeTxt, listenerNegative);
+        adb.setNeutralButton(btNeutralTxt, listenerNeutral);
+
+        return adb.show();
+    }
 }

@@ -67,6 +67,7 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mEdEmail = (EditText) findViewById(R.id.activityRegistration_EditText_email);
         mEdNick = (EditText) findViewById(R.id.activityRegistration_EditText_nick);
