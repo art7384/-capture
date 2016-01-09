@@ -1,6 +1,7 @@
-package com.capture.buisneslogick.object;
+package com.capture.buisneslogick.object.requestserver;
 
 import com.capture.buisneslogick.modul.RequestModul;
+import com.capture.buisneslogick.object.common.BaseObject;
 import com.capture.model.RequestModel;
 
 import org.json.JSONException;
@@ -25,7 +26,7 @@ public class RequestServerObject extends BaseObject {
     }
 
     @Override
-    JSONObject toJsonObject() throws JSONException {
+    public JSONObject toJsonObject() throws JSONException {
         return null;
     }
 }

@@ -21,7 +21,10 @@
             android:label="@string/app_name"/>
 
         <activity
-            android:name=".presentation.menu.registration.RegistrationActivity"
+            android:name=".presentation.registration.RegistrationActivity"
+            android:label="@string/title_registration"/>
+        <activity
+            android:name=".presentation.avtarization.AuthorizationActivity"
             android:label="@string/title_registration"/>
 
         <activity

@@ -14,7 +14,7 @@ public class GeneralConvector {
         JSONObject jsonObject = new JSONObject();
         if (model.idObject != -1) jsonObject.put(JsonKey.ID.toString(), model.idObject);
         if (model.nameObject != null) jsonObject.put(JsonKey.NAME.toString(), model.nameObject);
-        if (model.role != null) jsonObject.put(JsonKey.ROLE.toString(), model.role);
+        if (model.role != null) jsonObject.put(JsonKey.ROLE.toString(), model.role.toString());
         return jsonObject;
     }
 

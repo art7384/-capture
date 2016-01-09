@@ -1,10 +1,12 @@
 package com.capture.model;
 
+import com.capture.constant.RequestCommand;
+
 /**
  * Created by artem on 30.12.15.
  */
 public class RequestModel {
-    public String command = null;
+    public RequestCommand command = null;
     public long idRequest = -1;
     public String text = null;
     public int status = -1;

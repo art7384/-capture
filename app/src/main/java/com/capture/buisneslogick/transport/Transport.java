@@ -1,7 +1,7 @@
 package com.capture.buisneslogick.transport;
 
 import com.capture.AppSoket;
-import com.capture.buisneslogick.object.RequestServerObject;
+import com.capture.buisneslogick.object.requestserver.RequestServerObject;
 import com.capture.buisneslogick.transport.helper.OnCompliteTransportListner;
 import com.capture.buisneslogick.transport.helper.OnErrorTransportListner;
 

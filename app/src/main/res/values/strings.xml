@@ -13,11 +13,14 @@
 
     <string name="btn_socet_connect">Connect</string>
     <string name="btn_ok">Ok</string>
+    <string name="btn_map_go">Map ></string>
 
     <string name="ed_hint_email">Email</string>
     <string name="ed_hint_nickname">Nickname</string>
     <string name="ed_hint_pass">Password</string>
     <string name="ed_hint_pass2">Repeat password</string>
+
+    <string name="ed_invalid">Invalid</string>
 
     <string name="dialog_title_error">Error!</string>
     <string name="dialog_email_exists">A user with this e-mail is already registered</string>

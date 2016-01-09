@@ -1,6 +1,7 @@
 package com.capture.buisneslogick.modul;
 
 import com.capture.buisneslogick.convector.RequestConvector;
+import com.capture.constant.RequestCommand;
 import com.capture.model.RequestModel;
 
 import org.json.JSONException;
@@ -23,11 +24,11 @@ public class RequestModul implements BaseModul {
         return "request";
     }
 
-    public String getCommand(){
+    public RequestCommand getCommand(){
         return model.command;
     }
 
-    public void setConnand(String command){
+    public void setConnand(RequestCommand command){
         model.command = command;
     }
 

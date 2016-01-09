@@ -1,13 +1,10 @@
 package com.capture.presentation;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
@@ -17,8 +14,8 @@ import com.capture.AppSoket;
 import com.capture.R;
 import com.capture.presentation.common.BaseActivity;
 import com.capture.presentation.connect.ConnectActivity;
-import com.capture.presentation.helper.DialogFactory;
-import com.capture.presentation.menu.registration.RegistrationActivity;
+import com.capture.presentation.common.helper.DialogFactory;
+import com.capture.presentation.registration.RegistrationActivity;
 
 public class MainActivity extends BaseActivity {
 

@@ -12,7 +12,7 @@ public class RequestConvector {
 
     static public JSONObject convectToJson(RequestModel model) throws JSONException {
         JSONObject jsonObject = new JSONObject();
-        if (model.command != null) jsonObject.put(JsonKey.COMMAND.toString(), model.command);
+        if (model.command != null) jsonObject.put(JsonKey.COMMAND.toString(), model.command.toString());
         if (model.idRequest != -1) jsonObject.put(JsonKey.ID.toString(), model.idRequest);
         return jsonObject;
     }

@@ -1,8 +1,8 @@
 package com.capture.buisneslogick.modul;
 
 import com.capture.buisneslogick.convector.GeneralConvector;
+import com.capture.constant.ObjectRole;
 import com.capture.model.GeneralModel;
-import com.capture.role.Role;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,7 +30,7 @@ public class GeneralModul implements BaseModul {
     public String getNameObject(){
         return model.nameObject;
     }
-    public String getRole(){
+    public ObjectRole getRole(){
         return model.role;
     }
 
@@ -40,8 +40,8 @@ public class GeneralModul implements BaseModul {
     public void setNameObject(String name){
         model.nameObject = name;
     }
-    public void setRole(Role role){
-        model.role = role.toString();
+    public void setRole(ObjectRole role){
+        model.role = role;
     }
 
 }

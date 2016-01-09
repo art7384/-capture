@@ -10,8 +10,10 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.capture.buisneslogick.object.RequestServerObject;
-import com.capture.buisneslogick.convector.parser.object.ParserRequestServerObject;
+import com.bettervectordrawable.Convention;
+import com.bettervectordrawable.VectorDrawableCompat;
+import com.capture.buisneslogick.object.requestserver.RequestServerObject;
+import com.capture.buisneslogick.convector.parser.object.RequestServerObjectParser;
 import com.capture.service.SocketService;
 import com.koushikdutta.async.ByteBufferList;
 import com.koushikdutta.async.DataEmitter;
@@ -53,6 +55,11 @@ public class AppSoket extends Application implements SocketService.OnSocketListn
     @Override
     public void onCreate() {
         super.onCreate();
+
+        //Подключаем поддержку векторных изображений на Android4 (вектор поддерживается с Android 5)
+        int[] ids = VectorDrawableCompat.findVectorResourceIdsByConvention(getResources(), R.drawable.class, Convention.RESOURCE_NAME_HAS_VECTOR_SUFFIX/*.ResourceNameHasVectorSuffix*/);
+        VectorDrawableCompat.enableResourceInterceptionFor(getResources(), ids);
+
         sInstance = this;
         Intent intent = new Intent(this, SocketService.class);
         bindService(intent, mServiceConnection, BIND_AUTO_CREATE);
@@ -166,7 +173,7 @@ public class AppSoket extends Application implements SocketService.OnSocketListn
             if (jsObj != null) {
                 try {
                     // json объект может быть либо ответом, либо запросом
-                    RequestServerObject requestServerObject = ParserRequestServerObject.pars(jsObj);
+                    RequestServerObject requestServerObject = RequestServerObjectParser.pars(jsObj);
                     if (requestServerObject != null) {
                         long idRequest = requestServerObject.getRequestModul().getIdRequest();
                         OnCompliteListern listern = mListner.remove(idRequest);

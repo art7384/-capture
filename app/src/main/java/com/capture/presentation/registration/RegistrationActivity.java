@@ -1,22 +1,19 @@
-package com.capture.presentation.menu.registration;
+package com.capture.presentation.registration;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-
 import com.capture.AppSoket;
 import com.capture.R;
-import com.capture.buisneslogick.object.RequestServerObject;
-import com.capture.buisneslogick.object.UserObject;
+import com.capture.buisneslogick.object.requestserver.RequestServerObject;
 import com.capture.buisneslogick.service.UserService;
 import com.capture.buisneslogick.service.helpers.OnCompliteListern;
 import com.capture.buisneslogick.transport.helper.OnErrorTransportListner;
 import com.capture.model.UserModel;
 import com.capture.presentation.common.BaseActivity;
-import com.capture.presentation.helper.DialogFactory;
+import com.capture.presentation.common.helper.DialogFactory;
 
 import org.json.JSONException;
 
@@ -32,6 +29,39 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
     private EditText mEdPass;
     private EditText mEdPass2;
     private Button mBtOk;
+
+    private OnCompliteListern mOnCompliteListern = new OnCompliteListern() {
+        @Override
+        public void onComplite() {
+            cancelProgressDialog();
+            if(RegistrationActivity.this == null) return;
+
+        }
+    };
+
+    private OnErrorTransportListner mOnErrorTransportListner = new OnErrorTransportListner() {
+        @Override
+        public void onError(RequestServerObject requestServerObject) {
+            cancelProgressDialog();
+            if(RegistrationActivity.this == null) return;
+            int staus = requestServerObject.getRequestModul().getStatus();
+            String txt = requestServerObject.getRequestModul().getText();
+            switch (staus){
+                case 403: {
+                    DialogFactory.showError(RegistrationActivity.this, getString(R.string.dialog_email_exists));
+                    break;
+                }
+                case 409: {
+                    DialogFactory.showError(RegistrationActivity.this, getString(R.string.dialog_nickname_is_not_available));
+                    break;
+                }
+                default: {
+                    DialogFactory.showError(RegistrationActivity.this, "" + staus + ": " + txt);
+                    break;
+                }
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +94,16 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
         showDialogDisconnect(mess);
     }
 
+    /* ====== HELPERS ===== */
+
+    private UserModel createUserModel(){
+        UserModel user = new UserModel();
+        user.password = mEdPass.getText().toString();
+        user.email = mEdEmail.getText().toString();
+        String nick = mEdNick.getText().toString();
+        return user;
+    }
+
     /* ====== FUNCTION ===== */
     private void showDialogDisconnect(String mess) {
         DialogFactory.showError(this, mess, new DialogInterface.OnClickListener() {
@@ -76,64 +116,33 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
 
     private boolean isValid(){
         if(mEdEmail.getText().length() < 3){
-            mEdEmail.setError("Invalid");
+            mEdEmail.setError(getString(R.string.ed_invalid));
             return false;
         }
         if(mEdNick.getText().length() < 3){
-            mEdNick.setError("Invalid");
+            mEdNick.setError(getString(R.string.ed_invalid));
             return false;
         }
         if(mEdPass.getText().length() < 3){
-            mEdPass.setError("Invalid");
+            mEdPass.setError(getString(R.string.ed_invalid));
             return false;
         }
         if(!mEdPass.getText().toString().equals(mEdPass2.getText().toString())){
-            mEdPass2.setError("Invalid");
+            mEdPass2.setError(getString(R.string.ed_invalid));
             return false;
         }
         return true;
     }
 
     private void registration(){
-        UserModel user = new UserModel();
-        user.password = mEdPass.getText().toString();
-        user.email = mEdEmail.getText().toString();
+        UserModel user = createUserModel();
         String nick = mEdNick.getText().toString();
         try {
             showDialogDisconnect(getString(R.string.title_registration));
-            UserService.getInstance().registration(user, nick, new OnCompliteListern() {
-                @Override
-                public void onComplite() {
-                    cancelProgressDialog();
-                    if(RegistrationActivity.this == null) return;
-
-                }
-            }, new OnErrorTransportListner() {
-                @Override
-                public void onError(RequestServerObject requestServerObject) {
-                    cancelProgressDialog();
-                    if(RegistrationActivity.this == null) return;
-                    int staus = requestServerObject.getRequestModul().getStatus();
-                    String txt = requestServerObject.getRequestModul().getText();
-                    switch (staus){
-                        case 403: {
-                            DialogFactory.showError(RegistrationActivity.this, getString(R.string.dialog_email_exists));
-                            break;
-                        }
-                        case 409: {
-                            DialogFactory.showError(RegistrationActivity.this, getString(R.string.dialog_nickname_is_not_available));
-                            break;
-                        }
-                        default: {
-                            DialogFactory.showError(RegistrationActivity.this, "" + staus + ": " + txt);
-                            break;
-                        }
-                    }
-                }
-            });
+            UserService.getInstance().registration(user, nick, mOnCompliteListern, mOnErrorTransportListner);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
-            mEdPass.setError("Invalid");
+            mEdPass.setError(getString(R.string.ed_invalid));
             DialogFactory.showError(this, e.getMessage());
         } catch (JSONException e) {
             e.printStackTrace();

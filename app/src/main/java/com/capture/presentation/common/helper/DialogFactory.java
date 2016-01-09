@@ -1,4 +1,4 @@
-package com.capture.presentation.helper;
+package com.capture.presentation.common.helper;
 
 import android.content.Context;
 import android.content.DialogInterface;
