@@ -94,7 +94,7 @@ public class AppSoket extends Application implements SocketService.OnSocketListn
     public void send(JSONObject jsonObject, long id, OnCompliteListern listern) {
         mMessagesList.add(jsonObject);
         mListner.put(id, listern);
-        mHamdler.postAtTime(new OldRequest(id), 30000);
+        mHamdler.postDelayed(new OldRequest(id), 30000);
         try {
             send();
         } catch (JSONException e) {
@@ -179,10 +179,10 @@ public class AppSoket extends Application implements SocketService.OnSocketListn
                         OnCompliteListern listern = mListner.remove(idRequest);
                         if (listern != null) {
                             // отправляем ответ на обработку
-                            listern.onComplite(s, requestServerObject);
+                            listern.onComplite(jsObj, requestServerObject);
                         }
                     } else {
-                        // TODO: последующая оюработка ответа
+                        // TODO: последующая обработка ответа
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -233,7 +233,7 @@ public class AppSoket extends Application implements SocketService.OnSocketListn
      /* =========== EVENT =========== */
 
     public interface OnCompliteListern {
-        void onComplite(String s, RequestServerObject requestServerObject);
+        void onComplite(JSONObject jsObj, RequestServerObject requestServerObject);
     }
 
     private class OldRequest implements Runnable {

@@ -15,6 +15,7 @@ import com.capture.buisneslogick.transport.helper.OnErrorTransportListner;
 import com.capture.model.UserModel;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.security.NoSuchAlgorithmException;
 
@@ -73,15 +74,18 @@ public class UserService {
     public void exit(final OnCompliteListern listern, OnErrorTransportListner errorLiistner) throws JSONException {
         RequestObject exit = CreateRequestOperation.createExit();
         ExitOperation.exit(exit, new OnCompliteTransportListner() {
-
             @Override
-            public void OnComplite(String s, RequestServerObject requestServerObject) {
+            public void OnComplite(JSONObject jsonObject, RequestServerObject requestServerObject) {
                 UserProfile.getInstance().exit();
                 if (listern != null) {
                     listern.onComplite();
                 }
             }
         }, errorLiistner);
+    }
+
+    public UserObject getUserObject(){
+        return UserProfile.getInstance().get();
     }
 
     public boolean isAuthorization() {

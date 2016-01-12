@@ -10,6 +10,7 @@ import com.capture.buisneslogick.transport.helper.OnCompliteTransportListner;
 import com.capture.buisneslogick.transport.helper.OnErrorTransportListner;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by artem on 08.01.16.
@@ -21,8 +22,13 @@ public class RegistrationOperation {
                 registractionRequestObject,
                 new OnCompliteTransportListner() {
                     @Override
-                    public void OnComplite(String s, RequestServerObject requestServerObject) {
-                        UserObject user = UserObjectParser.pars(s);
+                    public void OnComplite(JSONObject jsObj, RequestServerObject requestServerObject) {
+                        UserObject user = null;
+                        try {
+                            user = UserObjectParser.pars(jsObj);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                         if (listern != null) {
                             listern.onComplite(user);
                         }

@@ -139,7 +139,7 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
         UserModel user = createUserModel();
         String nick = mEdNick.getText().toString();
         try {
-            showDialogDisconnect(getString(R.string.title_registration));
+            showProgressDialog(getString(R.string.title_registration));
             UserService.getInstance().registration(user, nick, mOnCompliteListern, mOnErrorTransportListner);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();

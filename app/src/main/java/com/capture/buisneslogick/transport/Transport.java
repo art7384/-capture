@@ -23,14 +23,14 @@ public class Transport {
     public void send(JSONObject jsObj){
         AppSoket.getInstance().send(jsObj, idRequest, new AppSoket.OnCompliteListern() {
             @Override
-            public void onComplite(String s, RequestServerObject requestServerObject) {
+            public void onComplite(JSONObject jsObj, RequestServerObject requestServerObject) {
                 if ((requestServerObject.getRequestModul().getStatus() / 100) != 2) {
                     if(onErrorTransportListner != null){
                         onErrorTransportListner.onError(requestServerObject);
                     }
                 } else {
                     if(onCompliteTransportListner != null){
-                        onCompliteTransportListner.OnComplite(s, requestServerObject);
+                        onCompliteTransportListner.OnComplite(jsObj, requestServerObject);
                     }
                 }
             }

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.capture.AppSoket;
 import com.capture.R;
 import com.capture.buisneslogick.service.UserService;
 import com.capture.presentation.about.AboutActivity;
@@ -57,9 +58,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onResume() {
         super.onResume();
-//        if(!AppSoket.getInstance().isConnect()){
-//            showDialogDisconnect(getString(R.string.socket_status_noсonnect));
-//        }
+        if(!AppSoket.getInstance().isConnect()){
+            showDialogDisconnect(getString(R.string.socket_status_noсonnect));
+        }
     }
 
     @Override

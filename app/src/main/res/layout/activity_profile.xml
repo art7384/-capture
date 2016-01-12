@@ -6,6 +6,7 @@
     android:padding="16dp">
 
     <TextView
+        android:id="@+id/activityProfile_TextView_email"
         android:text="Email"
         android:layout_margin="16dp"
         android:layout_gravity="center_horizontal"
@@ -13,6 +14,7 @@
         android:layout_height="wrap_content" />
 
     <TextView
+        android:id="@+id/activityProfile_TextView_nicname"
         android:text="Nicname"
         android:layout_margin="16dp"
         android:layout_gravity="center_horizontal"
