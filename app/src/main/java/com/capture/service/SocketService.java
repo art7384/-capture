@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.capture.AppSoket;
+import com.capture.buisneslogick.service.UserService;
 import com.koushikdutta.async.ByteBufferList;
 import com.koushikdutta.async.DataEmitter;
 import com.koushikdutta.async.callback.CompletedCallback;
@@ -136,6 +137,7 @@ public class SocketService extends Service {
     }
 
     public void connect(){
+        String token = UserService.getInstance().getUserObject().getUserModul().getTocken();
         disconnect();
         AsyncHttpGet get = new AsyncHttpGet(SOCKET_URL);
         //get.addHeader("os", "Android");
@@ -145,7 +147,7 @@ public class SocketService extends Service {
         //get.addHeader("manufacturer", Build.MANUFACTURER);
         get.addHeader("app-version-name", AppSoket.getInstance().getPackageInfo().versionName);
         get.addHeader("app-version-code", "" + AppSoket.getInstance().getPackageInfo().versionCode);
-        get.addHeader("token", null);
+        get.addHeader("token", token);
         AsyncHttpClient.getDefaultInstance().websocket(get, "http", mWebSocketConnectCallback);
     }
 

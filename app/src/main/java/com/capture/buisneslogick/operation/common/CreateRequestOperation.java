@@ -1,7 +1,7 @@
 package com.capture.buisneslogick.operation.common;
 
 import com.capture.buisneslogick.modul.RequestModul;
-import com.capture.buisneslogick.object.requestclien.RequestObject;
+import com.capture.object.request.RequestObject;
 import com.capture.constant.RequestCommand;
 
 import java.util.Date;

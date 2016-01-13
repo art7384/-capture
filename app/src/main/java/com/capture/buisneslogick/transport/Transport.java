@@ -1,9 +1,9 @@
 package com.capture.buisneslogick.transport;
 
 import com.capture.AppSoket;
-import com.capture.buisneslogick.object.requestserver.RequestServerObject;
 import com.capture.buisneslogick.transport.helper.OnCompliteTransportListner;
 import com.capture.buisneslogick.transport.helper.OnErrorTransportListner;
+import com.capture.object.ReturnObject;
 
 import org.json.JSONObject;
 
@@ -23,17 +23,18 @@ public class Transport {
     public void send(JSONObject jsObj){
         AppSoket.getInstance().send(jsObj, idRequest, new AppSoket.OnCompliteListern() {
             @Override
-            public void onComplite(JSONObject jsObj, RequestServerObject requestServerObject) {
-                if ((requestServerObject.getRequestModul().getStatus() / 100) != 2) {
+            public void onComplite(JSONObject jsObj, ReturnObject returnObject) {
+                if ((returnObject.getReturnModul().getStatus() / 100) != 2) {
                     if(onErrorTransportListner != null){
-                        onErrorTransportListner.onError(requestServerObject);
+                        onErrorTransportListner.onError(returnObject);
                     }
                 } else {
                     if(onCompliteTransportListner != null){
-                        onCompliteTransportListner.OnComplite(jsObj, requestServerObject);
+                        onCompliteTransportListner.OnComplite(jsObj, returnObject);
                     }
                 }
             }
+
         });
     }
 

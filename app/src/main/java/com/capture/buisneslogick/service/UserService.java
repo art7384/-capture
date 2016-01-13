@@ -1,9 +1,10 @@
 package com.capture.buisneslogick.service;
 
-import com.capture.buisneslogick.object.requestclien.RequestObject;
-import com.capture.buisneslogick.object.requestclien.UserRequestObject;
-import com.capture.buisneslogick.object.UserObject;
-import com.capture.buisneslogick.object.requestserver.RequestServerObject;
+import com.capture.model.ReturnModel;
+import com.capture.object.ReturnObject;
+import com.capture.object.request.RequestObject;
+import com.capture.object.request.UserRequestObject;
+import com.capture.object.UserObject;
 import com.capture.buisneslogick.operation.common.CreateRequestOperation;
 import com.capture.buisneslogick.operation.user.ExitOperation;
 import com.capture.buisneslogick.operation.user.CreateUserRequestObjectOperation;
@@ -75,7 +76,7 @@ public class UserService {
         RequestObject exit = CreateRequestOperation.createExit();
         ExitOperation.exit(exit, new OnCompliteTransportListner() {
             @Override
-            public void OnComplite(JSONObject jsonObject, RequestServerObject requestServerObject) {
+            public void OnComplite(JSONObject jsObj, ReturnObject returnObject) {
                 UserProfile.getInstance().exit();
                 if (listern != null) {
                     listern.onComplite();
@@ -89,6 +90,7 @@ public class UserService {
     }
 
     public boolean isAuthorization() {
-        return false;
+        String token = getUserObject().getUserModul().getTocken();
+        return token != null;
     }
 }

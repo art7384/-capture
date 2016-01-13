@@ -1,11 +1,10 @@
 package com.capture.buisneslogick.operation.user;
 
 import com.capture.buisneslogick.convector.parser.object.UserObjectParser;
-import com.capture.buisneslogick.object.requestclien.UserRequestObject;
-import com.capture.buisneslogick.object.requestserver.RequestServerObject;
-import com.capture.buisneslogick.object.UserObject;
+import com.capture.object.ReturnObject;
+import com.capture.object.request.UserRequestObject;
+import com.capture.object.UserObject;
 import com.capture.buisneslogick.transport.RequestTransport;
-import com.capture.buisneslogick.transport.UserRequestTransport;
 import com.capture.buisneslogick.transport.helper.OnCompliteTransportListner;
 import com.capture.buisneslogick.transport.helper.OnErrorTransportListner;
 
@@ -22,7 +21,7 @@ public class RegistrationOperation {
                 registractionRequestObject,
                 new OnCompliteTransportListner() {
                     @Override
-                    public void OnComplite(JSONObject jsObj, RequestServerObject requestServerObject) {
+                    public void OnComplite(JSONObject jsObj, ReturnObject returnObject) {
                         UserObject user = null;
                         try {
                             user = UserObjectParser.pars(jsObj);

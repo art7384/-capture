@@ -1,8 +1,8 @@
-package com.capture.buisneslogick.object;
+package com.capture.object;
 
 import com.capture.buisneslogick.modul.GeneralModul;
 import com.capture.buisneslogick.modul.UserModul;
-import com.capture.buisneslogick.object.common.BaseObject;
+import com.capture.object.common.BaseObject;
 import com.capture.model.GeneralModel;
 import com.capture.model.UserModel;
 

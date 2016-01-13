@@ -8,6 +8,4 @@ import com.capture.constant.RequestCommand;
 public class RequestModel {
     public RequestCommand command = null;
     public long idRequest = -1;
-    public String text = null;
-    public int status = -1;
 }

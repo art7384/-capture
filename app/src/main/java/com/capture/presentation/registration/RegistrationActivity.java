@@ -5,13 +5,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
 import com.capture.AppSoket;
 import com.capture.R;
-import com.capture.buisneslogick.object.requestserver.RequestServerObject;
 import com.capture.buisneslogick.service.UserService;
 import com.capture.buisneslogick.service.helpers.OnCompliteListern;
 import com.capture.buisneslogick.transport.helper.OnErrorTransportListner;
 import com.capture.model.UserModel;
+import com.capture.object.ReturnObject;
 import com.capture.presentation.common.BaseActivity;
 import com.capture.presentation.common.helper.DialogFactory;
 
@@ -34,19 +35,19 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
         @Override
         public void onComplite() {
             cancelProgressDialog();
-            if(RegistrationActivity.this == null) return;
+            if (RegistrationActivity.this == null) return;
 
         }
     };
 
     private OnErrorTransportListner mOnErrorTransportListner = new OnErrorTransportListner() {
         @Override
-        public void onError(RequestServerObject requestServerObject) {
+        public void onError(ReturnObject returnObject) {
             cancelProgressDialog();
-            if(RegistrationActivity.this == null) return;
-            int staus = requestServerObject.getRequestModul().getStatus();
-            String txt = requestServerObject.getRequestModul().getText();
-            switch (staus){
+            if (RegistrationActivity.this == null) return;
+            int staus = returnObject.getReturnModul().getStatus();
+            String txt = returnObject.getReturnModul().getText();
+            switch (staus) {
                 case 403: {
                     DialogFactory.showError(RegistrationActivity.this, getString(R.string.dialog_email_exists));
                     break;
@@ -97,7 +98,7 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
 
     /* ====== HELPERS ===== */
 
-    private UserModel createUserModel(){
+    private UserModel createUserModel() {
         UserModel user = new UserModel();
         user.password = mEdPass.getText().toString();
         user.email = mEdEmail.getText().toString();
@@ -115,27 +116,27 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
         });
     }
 
-    private boolean isValid(){
-        if(mEdEmail.getText().length() < 3){
+    private boolean isValid() {
+        if (mEdEmail.getText().length() < 3) {
             mEdEmail.setError(getString(R.string.ed_invalid));
             return false;
         }
-        if(mEdNick.getText().length() < 3){
+        if (mEdNick.getText().length() < 3) {
             mEdNick.setError(getString(R.string.ed_invalid));
             return false;
         }
-        if(mEdPass.getText().length() < 3){
+        if (mEdPass.getText().length() < 3) {
             mEdPass.setError(getString(R.string.ed_invalid));
             return false;
         }
-        if(!mEdPass.getText().toString().equals(mEdPass2.getText().toString())){
+        if (!mEdPass.getText().toString().equals(mEdPass2.getText().toString())) {
             mEdPass2.setError(getString(R.string.ed_invalid));
             return false;
         }
         return true;
     }
 
-    private void registration(){
+    private void registration() {
         UserModel user = createUserModel();
         String nick = mEdNick.getText().toString();
         try {
@@ -158,7 +159,7 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
         switch (v.getId()) {
             case R.id.activityRegistration_Button_ok: {
 
-                if(isValid()){
+                if (isValid()) {
                     registration();
                 }
 

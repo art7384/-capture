@@ -1,9 +1,7 @@
-package com.capture.buisneslogick.object.requestclien;
+package com.capture.object.request;
 
 import com.capture.buisneslogick.modul.GeneralModul;
-import com.capture.buisneslogick.modul.RequestModul;
 import com.capture.buisneslogick.modul.UserModul;
-import com.capture.buisneslogick.object.common.BaseObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;

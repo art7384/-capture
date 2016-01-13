@@ -12,8 +12,8 @@ import android.util.Log;
 
 import com.bettervectordrawable.Convention;
 import com.bettervectordrawable.VectorDrawableCompat;
-import com.capture.buisneslogick.object.requestserver.RequestServerObject;
-import com.capture.buisneslogick.convector.parser.object.RequestServerObjectParser;
+import com.capture.buisneslogick.convector.parser.object.ReturnObjectParser;
+import com.capture.object.ReturnObject;
 import com.capture.service.SocketService;
 import com.koushikdutta.async.ByteBufferList;
 import com.koushikdutta.async.DataEmitter;
@@ -173,13 +173,13 @@ public class AppSoket extends Application implements SocketService.OnSocketListn
             if (jsObj != null) {
                 try {
                     // json объект может быть либо ответом, либо запросом
-                    RequestServerObject requestServerObject = RequestServerObjectParser.pars(jsObj);
-                    if (requestServerObject != null) {
-                        long idRequest = requestServerObject.getRequestModul().getIdRequest();
+                    ReturnObject returnObject = ReturnObjectParser.pars(jsObj);
+                    if (returnObject != null) {
+                        long idRequest = returnObject.getReturnModul().getIdRequest();
                         OnCompliteListern listern = mListner.remove(idRequest);
                         if (listern != null) {
                             // отправляем ответ на обработку
-                            listern.onComplite(jsObj, requestServerObject);
+                            listern.onComplite(jsObj, returnObject);
                         }
                     } else {
                         // TODO: последующая обработка ответа
@@ -233,7 +233,7 @@ public class AppSoket extends Application implements SocketService.OnSocketListn
      /* =========== EVENT =========== */
 
     public interface OnCompliteListern {
-        void onComplite(JSONObject jsObj, RequestServerObject requestServerObject);
+        void onComplite(JSONObject jsObj, ReturnObject returnObject);
     }
 
     private class OldRequest implements Runnable {
@@ -247,11 +247,11 @@ public class AppSoket extends Application implements SocketService.OnSocketListn
         public void run() {
             OnCompliteListern listern = mListner.remove(idRequest);
             if (listern != null) {
-                RequestServerObject request = new RequestServerObject();
-                request.getRequestModul().setIdRequest(idRequest);
-                request.getRequestModul().setStatus(408);
-                request.getRequestModul().setText("Request Timeout");
-                listern.onComplite(null, request);
+                ReturnObject returnObject = new ReturnObject();
+                returnObject.getReturnModul().setIdRequest(idRequest);
+                returnObject.getReturnModul().setStatus(408);
+                returnObject.getReturnModul().setText("Request Timeout");
+                listern.onComplite(null, returnObject);
             }
         }
     }

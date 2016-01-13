@@ -2,8 +2,7 @@ package com.capture.buisneslogick.convector.parser.object;
 
 import com.capture.buisneslogick.convector.parser.models.ParserGeneral;
 import com.capture.buisneslogick.convector.parser.models.ParserUser;
-import com.capture.buisneslogick.modul.UserModul;
-import com.capture.buisneslogick.object.UserObject;
+import com.capture.object.UserObject;
 import com.capture.model.GeneralModel;
 import com.capture.model.UserModel;
 

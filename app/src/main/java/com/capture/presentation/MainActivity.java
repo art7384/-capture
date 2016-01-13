@@ -52,7 +52,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.activityMain_FloatingActionButton_add);
         fab.setOnClickListener(this);
 
-
     }
 
     @Override

@@ -39,20 +39,5 @@ public class RequestModul implements BaseModul {
 model.idRequest = id;
     }
 
-    public void setStatus(int status){
-        model.status = status;
-    }
-
-    public int getStatus(){
-        return model.status;
-    }
-
-    public void setText(String text){
-        model.text = text;
-    }
-
-    public String getText(){
-        return model.text;
-    }
 
 }

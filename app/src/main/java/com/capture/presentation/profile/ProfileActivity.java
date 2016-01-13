@@ -1,6 +1,5 @@
 package com.capture.presentation.profile;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -8,16 +7,13 @@ import android.widget.TextView;
 
 import com.capture.AppSoket;
 import com.capture.R;
-import com.capture.buisneslogick.object.UserObject;
-import com.capture.buisneslogick.object.requestserver.RequestServerObject;
+import com.capture.object.ReturnObject;
+import com.capture.object.UserObject;
 import com.capture.buisneslogick.service.UserService;
 import com.capture.buisneslogick.service.helpers.OnCompliteListern;
 import com.capture.buisneslogick.transport.helper.OnErrorTransportListner;
-import com.capture.model.UserModel;
-import com.capture.presentation.avtarization.AuthorizationActivity;
 import com.capture.presentation.common.BaseActivity;
 import com.capture.presentation.common.helper.DialogFactory;
-import com.capture.presentation.registration.RegistrationActivity;
 
 import org.json.JSONException;
 
@@ -39,10 +35,10 @@ public class ProfileActivity extends BaseActivity {
 
     private OnErrorTransportListner mOnErrorTransportListner = new OnErrorTransportListner() {
         @Override
-        public void onError(RequestServerObject requestServerObject) {
+        public void onError(ReturnObject returnObject) {
             cancelProgressDialog();
-            int status = requestServerObject.getRequestModul().getStatus();
-            String info = requestServerObject.getRequestModul().getText();
+            int status = returnObject.getReturnModul().getStatus();
+            String info = returnObject.getReturnModul().getText();
             DialogFactory.showError(ProfileActivity.this, status + ": " + info);
         }
     };

@@ -1,4 +1,4 @@
-package com.capture.buisneslogick.object.common;
+package com.capture.object.common;
 
 import org.json.JSONException;
 import org.json.JSONObject;
