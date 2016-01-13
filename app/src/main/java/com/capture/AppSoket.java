@@ -12,8 +12,10 @@ import android.util.Log;
 
 import com.bettervectordrawable.Convention;
 import com.bettervectordrawable.VectorDrawableCompat;
+import com.capture.buisneslogick.convector.parser.object.RequestObjectParser;
 import com.capture.buisneslogick.convector.parser.object.ReturnObjectParser;
 import com.capture.object.ReturnObject;
+import com.capture.object.request.RequestObject;
 import com.capture.service.SocketService;
 import com.koushikdutta.async.ByteBufferList;
 import com.koushikdutta.async.DataEmitter;
@@ -160,39 +162,68 @@ public class AppSoket extends Application implements SocketService.OnSocketListn
         }
         // сообщение должен быть json массив
         if (jsArr == null) return;
+        arrayProcessing(jsArr);
 
-        // бежим по массиву
+
+        Intent intent = new Intent();
+        sendOrderedBroadcast(intent, KeyBroadcast.SOCET_MESSAGE);
+    }
+
+    private void arrayProcessing(JSONArray jsArr){
         for (int i = 0; i < jsArr.length(); i++) {
             JSONObject jsObj = null;
+
             try {
                 jsObj = jsArr.getJSONObject(i);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+
             // массив состоит из json объектов (моделей)
             if (jsObj != null) {
-                try {
-                    // json объект может быть либо ответом, либо запросом
-                    ReturnObject returnObject = ReturnObjectParser.pars(jsObj);
-                    if (returnObject != null) {
-                        long idRequest = returnObject.getReturnModul().getIdRequest();
-                        OnCompliteListern listern = mListner.remove(idRequest);
-                        if (listern != null) {
-                            // отправляем ответ на обработку
-                            listern.onComplite(jsObj, returnObject);
-                        }
-                    } else {
-                        // TODO: последующая обработка ответа
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                objectProcessing(jsObj);
+
             }
         }
-
-        Intent intent = new Intent();
-        sendOrderedBroadcast(intent, KeyBroadcast.SOCET_MESSAGE);
     }
+
+    private void objectProcessing(JSONObject jsObj){
+        RequestObject requestObject = null;
+        ReturnObject returnObject = null;
+
+        try {
+            // json объект может быть либо ответом
+            returnObject = ReturnObjectParser.pars(jsObj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            // json объект может быть либо запросом
+            returnObject = ReturnObjectParser.pars(jsObj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        //TODO: json объект может быть либо фото
+        if (returnObject != null) {
+            returnProcessing(jsObj, returnObject);
+        } else if(requestObject != null){
+            requestProcessing(jsObj, requestObject);
+        }
+    }
+
+    private void requestProcessing(JSONObject jsObj, RequestObject requestObject){
+        RequestService.getInstance().processing(jsObj, requestObject);
+    }
+
+    private void returnProcessing(JSONObject jsObj, ReturnObject returnObject){
+        long idRequest = returnObject.getReturnModul().getIdRequest();
+        OnCompliteListern listern = mListner.remove(idRequest);
+        if (listern != null) {
+            // отправляем ответ на обработку
+            listern.onComplite(jsObj, returnObject);
+        }
+    }
+
 
     @Override
     public void onErrorConnect(Exception e) {
@@ -227,7 +258,6 @@ public class AppSoket extends Application implements SocketService.OnSocketListn
         static public final Integer CONNECT = 0;
         static public final Integer COMPLITED = 1;
         static public final Integer ERROR_CONNECT = 2;
-
     }
 
      /* =========== EVENT =========== */

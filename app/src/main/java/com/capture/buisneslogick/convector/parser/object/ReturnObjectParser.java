@@ -14,16 +14,18 @@ public class ReturnObjectParser {
 
     static public ReturnObject pars(JSONObject jsObj) throws JSONException {
 
+        ReturnObject returnObject = new ReturnObject();
+
         JSONObject jsRequest = null;
         try {
-            jsRequest = jsObj.getJSONObject("request");
+            jsRequest = jsObj.getJSONObject(returnObject.getReturnModul().getJsonKey());
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         if(jsRequest == null) return null;
 
-        ReturnObject returnObject = new ReturnObject();
+
         ReturnModel model = ParserReturn.pars(jsRequest);
         returnObject.getReturnModul().setReturnModul(model);
 

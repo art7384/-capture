@@ -40,4 +40,8 @@ model.idRequest = id;
     }
 
 
+    public void setRequestModel(RequestModel requestModel) {
+        model.idRequest = requestModel.idRequest;
+        model.command = requestModel.command;
+    }
 }
