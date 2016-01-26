@@ -1,14 +1,13 @@
-package com.capture.object;
+package com.capture.object.request;
 
 import com.capture.model.BaseModel;
 import com.capture.model.GeneralModel;
 import com.capture.model.UserModel;
-import com.capture.object.common.BaseObject;
 
 /**
- * Created by artem on 07.01.16.
+ * Created by artem on 26.01.16.
  */
-public class UserObject extends BaseObject {
+public class RegistrationRequestObject extends RequestObject {
 
     private GeneralModel generalModel = null;
     private UserModel userModel = null;
@@ -31,6 +30,6 @@ public class UserObject extends BaseObject {
 
     @Override
     public BaseModel[] getModels() {
-        return new BaseModel[]{generalModel, userModel};
+        return new BaseModel[]{getRequestModel(), generalModel, userModel};
     }
 }

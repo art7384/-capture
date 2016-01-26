@@ -1,4 +1,4 @@
-package com.capture.buisneslogick.convector.parser.models;
+package com.capture.buisneslogick.convector.parser;
 
 import com.capture.constant.ObjectRole;
 import com.capture.model.GeneralModel;
@@ -17,14 +17,14 @@ public class ParserGeneral {
                 "role":"user"
     }*/
         GeneralModel model = new GeneralModel();
-        model.idObject = jsonObject.getLong("id");
+        model.idObject = jsonObject.getLong(GeneralModel.JsonKey.ID.toString());
         try {
-            model.nameObject = jsonObject.getString("name");
+            model.nameObject = jsonObject.getString(GeneralModel.JsonKey.NAME.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
         try {
-            String role = jsonObject.getString("role");
+            String role = jsonObject.getString(GeneralModel.JsonKey.ROLE.toString());
             model.role = ObjectRole.get(role);
         } catch (JSONException e) {
             e.printStackTrace();

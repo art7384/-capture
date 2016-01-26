@@ -10,7 +10,7 @@ import com.capture.AppSoket;
 import com.capture.R;
 import com.capture.buisneslogick.service.UserService;
 import com.capture.buisneslogick.service.helpers.OnCompliteListern;
-import com.capture.buisneslogick.transport.helper.OnErrorTransportListner;
+import com.capture.buisneslogick.transport.OnErrorTransportListner;
 import com.capture.model.UserModel;
 import com.capture.object.ReturnObject;
 import com.capture.presentation.common.BaseActivity;

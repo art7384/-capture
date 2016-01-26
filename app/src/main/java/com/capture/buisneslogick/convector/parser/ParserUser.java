@@ -1,4 +1,4 @@
-package com.capture.buisneslogick.convector.parser.models;
+package com.capture.buisneslogick.convector.parser;
 
 import com.capture.model.UserModel;
 
@@ -15,8 +15,8 @@ public class ParserUser {
                 "token":"345a7c1da6ff89eb4da7a651528a4546"
             }*/
         UserModel model = new UserModel();
-        model.email = jsonObject.getString("email");
-        model.tocken = jsonObject.getString("token");
+        model.email = jsonObject.getString(UserModel.JsonKey.EMAIL.toString());
+        model.tocken = jsonObject.getString(UserModel.JsonKey.TOKEN.toString());
         return model;
     }
 }

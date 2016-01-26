@@ -1,22 +1,15 @@
 package com.capture.buisneslogick.service;
 
-import com.capture.model.ReturnModel;
-import com.capture.object.ReturnObject;
-import com.capture.object.request.RequestObject;
-import com.capture.object.request.UserRequestObject;
+import com.capture.buisneslogick.operation.CreaterRegistrationRequestObject;
+import com.capture.buisneslogick.operation.Registration;
+import com.capture.buisneslogick.transport.OnCompliteListner;
+import com.capture.object.request.RegistrationRequestObject;
 import com.capture.object.UserObject;
-import com.capture.buisneslogick.operation.common.CreateRequestOperation;
-import com.capture.buisneslogick.operation.user.ExitOperation;
-import com.capture.buisneslogick.operation.user.CreateUserRequestObjectOperation;
-import com.capture.buisneslogick.operation.user.RegistrationOperation;
 import com.capture.buisneslogick.persisten.UserProfile;
-import com.capture.buisneslogick.service.helpers.OnCompliteListern;
-import com.capture.buisneslogick.transport.helper.OnCompliteTransportListner;
-import com.capture.buisneslogick.transport.helper.OnErrorTransportListner;
+import com.capture.buisneslogick.transport.OnErrorTransportListner;
 import com.capture.model.UserModel;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.security.NoSuchAlgorithmException;
 
@@ -40,49 +33,12 @@ public class UserService {
     public void registration(
             UserModel userModel,
             String nick,
-            final OnCompliteListern listern,
+            OnCompliteListner listern,
             OnErrorTransportListner errorListner) throws NoSuchAlgorithmException, JSONException {
 
-        UserRequestObject registractionRequestObject = CreateUserRequestObjectOperation.createRegistration(userModel, nick);
-        RegistrationOperation.registration(registractionRequestObject, new RegistrationOperation.OnCompliteUserListner() {
-            @Override
-            public void onComplite(UserObject user) {
-                UserProfile.getInstance().save(user);
-                if (listern != null) {
-                    listern.onComplite();
-                }
-            }
-        }, errorListner);
-    }
 
-    public void authorization(
-            UserModel userModel,
-            final OnCompliteListern listern,
-            OnErrorTransportListner errorListner) throws NoSuchAlgorithmException, JSONException {
-
-        UserRequestObject authorization = CreateUserRequestObjectOperation.createAthorization(userModel);
-        RegistrationOperation.registration(authorization, new RegistrationOperation.OnCompliteUserListner() {
-            @Override
-            public void onComplite(UserObject user) {
-                UserProfile.getInstance().save(user);
-                if (listern != null) {
-                    listern.onComplite();
-                }
-            }
-        }, errorListner);
-    }
-
-    public void exit(final OnCompliteListern listern, OnErrorTransportListner errorLiistner) throws JSONException {
-        RequestObject exit = CreateRequestOperation.createExit();
-        ExitOperation.exit(exit, new OnCompliteTransportListner() {
-            @Override
-            public void OnComplite(JSONObject jsObj, ReturnObject returnObject) {
-                UserProfile.getInstance().exit();
-                if (listern != null) {
-                    listern.onComplite();
-                }
-            }
-        }, errorLiistner);
+        RegistrationRequestObject registractionRequestObject = CreaterRegistrationRequestObject.create(userModel, nick);
+        Registration.registration(registractionRequestObject,listern, errorListner);
     }
 
     public UserObject getUserObject(){
@@ -90,7 +46,8 @@ public class UserService {
     }
 
     public boolean isAuthorization() {
-        String token = getUserObject().getUserModul().getTocken();
+        if(getUserObject().getUserModel() == null) return false;
+        String token = getUserObject().getUserModel().tocken;
         return token != null;
     }
 }

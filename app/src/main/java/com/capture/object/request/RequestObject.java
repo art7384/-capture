@@ -1,6 +1,8 @@
 package com.capture.object.request;
 
-import com.capture.buisneslogick.modul.RequestModul;
+import com.capture.buisneslogick.convector.parser.ParserRequest;
+import com.capture.model.BaseModel;
+import com.capture.model.RequestModel;
 import com.capture.object.common.BaseObject;
 
 import org.json.JSONException;
@@ -11,18 +13,31 @@ import org.json.JSONObject;
  */
 public class RequestObject extends BaseObject {
 
-    private final RequestModul requestModul = new RequestModul();
+    private RequestModel requestModel = null;
+
+    public RequestObject(){
+
+    }
+
+    public RequestObject(JSONObject jsonObject){
+        try {
+            JSONObject jsRequest = jsonObject.getJSONObject(requestModel.getModelType().toString());
+            requestModel = ParserRequest.pars(jsRequest);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public RequestModel getRequestModel() {
+        return requestModel;
+    }
+
+    public void setRequestModel(RequestModel requestModel) {
+        this.requestModel = requestModel;
+    }
 
     @Override
-    public JSONObject toJsonObject() throws JSONException {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put(requestModul.getJsonKey(), requestModul.toJsonObject());
-        return jsonObject;
+    public BaseModel[] getModels() {
+        return new BaseModel[]{requestModel};
     }
-
-    public RequestModul getRequestModul(){
-        return requestModul;
-    }
-
-
 }

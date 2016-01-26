@@ -12,8 +12,7 @@ import android.util.Log;
 
 import com.bettervectordrawable.Convention;
 import com.bettervectordrawable.VectorDrawableCompat;
-import com.capture.buisneslogick.convector.parser.object.RequestObjectParser;
-import com.capture.buisneslogick.convector.parser.object.ReturnObjectParser;
+
 import com.capture.object.ReturnObject;
 import com.capture.object.request.RequestObject;
 import com.capture.service.SocketService;
@@ -46,7 +45,6 @@ public class AppSoket extends Application implements SocketService.OnSocketListn
         public void onServiceConnected(ComponentName name, IBinder binder) {
             mSocketService = ((SocketService.SocketBinder) binder).getService();
             mSocketService.setOnSocketListner(AppSoket.getInstance());
-            //mSocketService.connect();
         }
 
         public void onServiceDisconnected(ComponentName name) {
@@ -188,38 +186,31 @@ public class AppSoket extends Application implements SocketService.OnSocketListn
     }
 
     private void objectProcessing(JSONObject jsObj){
-        RequestObject requestObject = null;
-        ReturnObject returnObject = null;
 
-        try {
-            // json объект может быть либо ответом
-            returnObject = ReturnObjectParser.pars(jsObj);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            // json объект может быть либо запросом
-            returnObject = ReturnObjectParser.pars(jsObj);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        //TODO: json объект может быть либо фото
-        if (returnObject != null) {
+        ReturnObject returnObject = new ReturnObject(jsObj);
+        if(returnObject.getReturnModel() != null){
             returnProcessing(jsObj, returnObject);
-        } else if(requestObject != null){
-            requestProcessing(jsObj, requestObject);
+            return;
         }
+        RequestObject requestObject = new RequestObject(jsObj);
+        if(returnObject.getReturnModel() != null){
+            requestProcessing(jsObj, requestObject);
+            return;
+        }
+        // TODO: json объект может быть часть игрового фото
+
     }
 
     private void requestProcessing(JSONObject jsObj, RequestObject requestObject){
-        RequestService.getInstance().processing(jsObj, requestObject);
+        Log.d(LOG_TAG, jsObj.toString());
+        //RequestService.getInstance().processing(jsObj, requestObject);
     }
 
     private void returnProcessing(JSONObject jsObj, ReturnObject returnObject){
-        long idRequest = returnObject.getReturnModul().getIdRequest();
+        long idRequest = returnObject.getReturnModel().idRequest;
         OnCompliteListern listern = mListner.remove(idRequest);
         if (listern != null) {
-            // отправляем ответ на обработку
+            // отправляем событие слушателю
             listern.onComplite(jsObj, returnObject);
         }
     }
@@ -278,9 +269,9 @@ public class AppSoket extends Application implements SocketService.OnSocketListn
             OnCompliteListern listern = mListner.remove(idRequest);
             if (listern != null) {
                 ReturnObject returnObject = new ReturnObject();
-                returnObject.getReturnModul().setIdRequest(idRequest);
-                returnObject.getReturnModul().setStatus(408);
-                returnObject.getReturnModul().setText("Request Timeout");
+                returnObject.getReturnModel().idRequest = idRequest;
+                returnObject.getReturnModel().status = 408;
+                returnObject.getReturnModel().text = "Request Timeout";
                 listern.onComplite(null, returnObject);
             }
         }

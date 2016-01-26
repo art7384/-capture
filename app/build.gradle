@@ -26,4 +26,5 @@ dependencies {
     compile 'com.android.support:design:23.1.1'
     compile 'com.koushikdutta.async:androidasync:2.+'
     compile 'com.bettervectordrawable:lib:0.7+'
+    compile 'org.osmdroid:osmdroid-android:5.0.1@aar'
 }

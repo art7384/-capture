@@ -1,7 +1,7 @@
 package com.capture.object;
 
-import com.capture.buisneslogick.modul.RequestModul;
-import com.capture.buisneslogick.modul.ReturnModul;
+import com.capture.buisneslogick.convector.parser.ParserReturn;
+import com.capture.model.BaseModel;
 import com.capture.model.ReturnModel;
 import com.capture.object.common.BaseObject;
 
@@ -13,13 +13,31 @@ import org.json.JSONObject;
  */
 public class ReturnObject extends BaseObject {
 
-    private ReturnModul requestModul = new ReturnModul();
+    private ReturnModel returnModel = null;
+
+    public ReturnObject(){
+
+    }
+
+    public ReturnObject(JSONObject jsObj){
+        try {
+            JSONObject jsReturn = jsObj.getJSONObject(returnModel.getModelType().toString());
+            returnModel = ParserReturn.pars(jsReturn);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public ReturnModel getReturnModel(){
+        return returnModel;
+    }
+
+    public void setReturnModel(ReturnModel returnModel){
+        this.returnModel = returnModel;
+    }
 
     @Override
-    public JSONObject toJsonObject() throws JSONException {
-        return null;
-    }
-    public ReturnModul getReturnModul(){
-        return requestModul;
+    public BaseModel[] getModels() {
+        return new BaseModel[]{returnModel};
     }
 }

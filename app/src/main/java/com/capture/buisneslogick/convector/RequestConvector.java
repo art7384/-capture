@@ -12,25 +12,8 @@ public class RequestConvector {
 
     static public JSONObject convectToJson(RequestModel model) throws JSONException {
         JSONObject jsonObject = new JSONObject();
-        if (model.command != null) jsonObject.put(JsonKey.COMMAND.toString(), model.command.toString());
-        if (model.idRequest != -1) jsonObject.put(JsonKey.ID.toString(), model.idRequest);
+        if (model.command != null) jsonObject.put(RequestModel.JsonKey.COMMAND.toString(), model.command.toString());
+        if (model.idRequest != -1) jsonObject.put(RequestModel.JsonKey.ID.toString(), model.idRequest);
         return jsonObject;
-    }
-
-    private enum JsonKey {
-        COMMAND("command"),
-        ID("id");
-
-        String key;
-
-        JsonKey(String key) {
-            this.key = key;
-        }
-
-        @Override
-        public String toString() {
-            return key;
-        }
-
     }
 }

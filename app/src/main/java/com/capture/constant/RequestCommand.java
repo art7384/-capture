@@ -11,13 +11,31 @@ public enum RequestCommand {
     CREATE_USER("create_user"),
     AUTHORIZATION("authorization");
     private String command;
-    RequestCommand(String command){
+
+    RequestCommand(String command) {
         this.command = command;
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return command;
+    }
+
+    static public RequestCommand get(String command){
+        if (command.equals(EXIT.toString())){
+            return EXIT;
+        }else if (command.equals(CREATE_SCEN.toString())){
+            return CREATE_SCEN;
+        } else if (command.equals(CONNECT_SCEN.toString())){
+            return CONNECT_SCEN;
+        } else if (command.equals(GET_SCEN.toString())){
+            return GET_SCEN;
+        } else if (command.equals(CREATE_USER.toString())){
+            return CREATE_USER;
+        } else if (command.equals(AUTHORIZATION.toString())){
+            return AUTHORIZATION;
+        }
+        return null;
     }
 
 }
