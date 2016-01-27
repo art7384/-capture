@@ -1,6 +1,6 @@
 package com.capture.model;
 
-import com.capture.constant.ObjectRole;
+import com.capture.object.common.BaseObject;
 
 /**
  * Created by artem on 30.12.15.
@@ -9,7 +9,7 @@ public class GeneralModel extends BaseModel {
 
     public long idObject = -1;
     public String nameObject = null;
-    public ObjectRole role = null;
+    public BaseObject.Role role = null;
 
     @Override
     public ModelType getModelType() {

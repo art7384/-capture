@@ -4,15 +4,16 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.capture.AppSoket;
-import com.capture.buisneslogick.modul.GeneralModul;
-import com.capture.buisneslogick.modul.UserModul;
+import com.capture.model.GeneralModel;
+import com.capture.model.UserModel;
 import com.capture.object.UserObject;
 import com.capture.buisneslogick.persisten.Helpers.Keys;
-import com.capture.constant.ObjectRole;
+import com.capture.object.common.BaseObject;
 
 /**
  * Created by artem on 07.01.16.
  */
+
 public class UserProfile {
 
     static private UserProfile instance = null;
@@ -33,29 +34,34 @@ public class UserProfile {
     }
 
     public void exit() {
-
+        ed.clear();
+        ed.commit();
     }
 
     public void save(UserObject user) {
 
-        UserModul userModul = user.getUserModul();
-        GeneralModul generalModul = user.getGeneralModul();
-        putId(generalModul.getIdObject());
-        putName(generalModul.getNameObject());
-        putToken(userModul.getTocken());
-        putEmail(userModul.getEmail());
+        UserModel userModel = user.getUserModel();
+        GeneralModel generalModel = user.getGeneralModel();
+        putId(generalModel.idObject);
+        putName(generalModel.nameObject);
+        putToken(userModel.tocken);
+        putEmail(userModel.email);
     }
 
     public UserObject get() {
-        UserObject user = new UserObject();
-        UserModul userModul = user.getUserModul();
-        GeneralModul generalModul = user.getGeneralModul();
 
-        userModul.setEmail(getEmail());
-        userModul.setTocken(getToken());
-        generalModul.setIdObject(getId());
-        generalModul.setNameObject(getName());
-        generalModul.setRole(ObjectRole.USER);
+        UserObject user = new UserObject();
+        UserModel userModel = new UserModel();
+        GeneralModel generalModel = new GeneralModel();
+
+        userModel.email = getEmail();
+        userModel.tocken = getToken();
+        generalModel.idObject = getId();
+        generalModel.nameObject = getName();
+        generalModel.role = BaseObject.Role.USER;
+
+        user.setGeneralModel(generalModel);
+        user.setUserModel(userModel);
 
         return user;
     }

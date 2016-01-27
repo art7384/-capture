@@ -10,6 +10,11 @@ public abstract class BaseModel {
         RETURN("return"),
         REQUEST("request"),
         GENERAL("general"),
+        VISIBLE("visible"),
+        TAKOVER("takover"),
+        MESSAGE("message"),
+        REPOSITORY("repository"),
+        INDEX("index"),
         CLIENT("client");
 
         String type;

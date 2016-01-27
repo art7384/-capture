@@ -1,22 +1,19 @@
 package com.capture.model;
 
-import com.capture.object.request.RequestObject;
-
 /**
- * Created by artem on 30.12.15.
+ * Created by artem on 27.01.16.
  */
-public class RequestModel extends BaseModel{
-    public RequestObject.Command command = null;
-    public long idRequest = -1;
+public class IndexModel extends BaseModel {
+
+    public long idObj = -1;
 
     @Override
     public ModelType getModelType() {
-        return ModelType.REQUEST;
+        return ModelType.INDEX;
     }
 
     public enum JsonKey {
-        COMMAND("command"),
-        ID("id");
+        ID_OBJECT("idObject");
 
         String key;
 
@@ -30,5 +27,4 @@ public class RequestModel extends BaseModel{
         }
 
     }
-
 }

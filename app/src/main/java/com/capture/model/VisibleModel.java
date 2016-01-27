@@ -1,22 +1,22 @@
 package com.capture.model;
 
-import com.capture.object.request.RequestObject;
-
 /**
- * Created by artem on 30.12.15.
+ * Created by artem on 27.01.16.
  */
-public class RequestModel extends BaseModel{
-    public RequestObject.Command command = null;
-    public long idRequest = -1;
+public class VisibleModel extends BaseModel {
+    public long radius = 0;
+    public long lat = 0;
+    public long lng = 0;
 
     @Override
     public ModelType getModelType() {
-        return ModelType.REQUEST;
+        return ModelType.VISIBLE;
     }
 
     public enum JsonKey {
-        COMMAND("command"),
-        ID("id");
+        RADIUS("radius"),
+        LAT("lat"),
+        LNG("lng");
 
         String key;
 

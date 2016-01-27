@@ -167,6 +167,10 @@ public class AppSoket extends Application implements SocketService.OnSocketListn
         sendOrderedBroadcast(intent, KeyBroadcast.SOCET_MESSAGE);
     }
 
+    public void disconnect(){
+        mSocketService.disconnect();
+    }
+
     private void arrayProcessing(JSONArray jsArr){
         for (int i = 0; i < jsArr.length(); i++) {
             JSONObject jsObj = null;

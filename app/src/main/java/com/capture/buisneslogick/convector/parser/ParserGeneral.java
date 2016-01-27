@@ -1,7 +1,7 @@
 package com.capture.buisneslogick.convector.parser;
 
-import com.capture.constant.ObjectRole;
 import com.capture.model.GeneralModel;
+import com.capture.object.common.BaseObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,7 +25,7 @@ public class ParserGeneral {
         }
         try {
             String role = jsonObject.getString(GeneralModel.JsonKey.ROLE.toString());
-            model.role = ObjectRole.get(role);
+            model.role = BaseObject.Role.get(role);
         } catch (JSONException e) {
             e.printStackTrace();
         }

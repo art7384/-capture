@@ -9,12 +9,12 @@ import android.widget.EditText;
 import com.capture.AppSoket;
 import com.capture.R;
 import com.capture.buisneslogick.service.UserService;
-import com.capture.buisneslogick.service.helpers.OnCompliteListern;
 import com.capture.buisneslogick.transport.OnErrorTransportListner;
 import com.capture.model.UserModel;
 import com.capture.object.ReturnObject;
 import com.capture.presentation.common.BaseActivity;
 import com.capture.presentation.common.helper.DialogFactory;
+import com.capture.buisneslogick.transport.OnCompliteListner;
 
 import org.json.JSONException;
 
@@ -31,7 +31,7 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
     private EditText mEdPass2;
     private Button mBtOk;
 
-    private OnCompliteListern mOnCompliteListern = new OnCompliteListern() {
+    private OnCompliteListner mOnCompliteListner = new OnCompliteListner() {
         @Override
         public void onComplite() {
             cancelProgressDialog();
@@ -45,8 +45,8 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
         public void onError(ReturnObject returnObject) {
             cancelProgressDialog();
             if (RegistrationActivity.this == null) return;
-            int staus = returnObject.getReturnModul().getStatus();
-            String txt = returnObject.getReturnModul().getText();
+            int staus = returnObject.getReturnModel().status;
+            String txt = returnObject.getReturnModel().text;
             switch (staus) {
                 case 403: {
                     DialogFactory.showError(RegistrationActivity.this, getString(R.string.dialog_email_exists));
@@ -141,7 +141,7 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
         String nick = mEdNick.getText().toString();
         try {
             showProgressDialog(getString(R.string.title_registration));
-            UserService.getInstance().registration(user, nick, mOnCompliteListern, mOnErrorTransportListner);
+            UserService.getInstance().registration(user, nick, mOnCompliteListner, mOnErrorTransportListner);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
             mEdPass.setError(getString(R.string.ed_invalid));

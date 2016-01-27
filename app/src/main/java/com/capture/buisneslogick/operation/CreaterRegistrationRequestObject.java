@@ -1,10 +1,9 @@
 package com.capture.buisneslogick.operation;
 
-import com.capture.constant.ObjectRole;
-import com.capture.constant.RequestCommand;
 import com.capture.model.GeneralModel;
 import com.capture.model.RequestModel;
 import com.capture.model.UserModel;
+import com.capture.object.common.BaseObject;
 import com.capture.object.request.RegistrationRequestObject;
 import com.capture.object.request.RequestObject;
 
@@ -20,11 +19,11 @@ public class CreaterRegistrationRequestObject {
         RegistrationRequestObject requestObj = new RegistrationRequestObject();
 
         RequestModel request = new RequestModel();
-        request.command = RequestCommand.CREATE_USER;
+        request.command = RequestObject.Command.CREATE_USER;
         request.idRequest = new Date().getTime();
 
         GeneralModel general = new GeneralModel();
-        general.role = ObjectRole.USER;
+        general.role = BaseObject.Role.USER;
         general.nameObject = nick;
 
         requestObj.setRequestModel(request);

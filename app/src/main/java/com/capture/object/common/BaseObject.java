@@ -42,5 +42,28 @@ public abstract class BaseObject {
         return jsonObject;
     }
 
+    public enum Role {
+        SCEN("scen"),
+        USER("user");
+        String role;
+
+        Role(String role) {
+            this.role = role;
+        }
+
+        @Override
+        public String toString() {
+            return role;
+        }
+
+        static public Role get(String role) {
+            if (role.equals(Role.USER.toString()))
+                return Role.USER;
+            if (role.equals(Role.SCEN.toString()))
+                return Role.SCEN;
+            return null;
+        }
+    }
+
 
 }

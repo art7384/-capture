@@ -25,8 +25,8 @@ public class SplashActivity extends Activity {
         mHandler.postAtTime(new Runnable() {
             @Override
             public void run() {
-                //startActivity(new Intent(SplashActivity.this, ConnectActivity.class));
-                startActivity(new Intent(SplashActivity.this, GameActivity.class));
+                startActivity(new Intent(SplashActivity.this, ConnectActivity.class));
+                //startActivity(new Intent(SplashActivity.this, GameActivity.class));
                         finish();
             }
         }, 3000);

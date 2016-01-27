@@ -1,22 +1,23 @@
 package com.capture.model;
 
-import com.capture.object.request.RequestObject;
-
 /**
- * Created by artem on 30.12.15.
+ * Created by artem on 27.01.16.
  */
-public class RequestModel extends BaseModel{
-    public RequestObject.Command command = null;
-    public long idRequest = -1;
+public class RepositoryModel extends BaseModel {
+
+    public int banner = 0;
+    public int maxBanner = 0;
+    public boolean isPlant = false;
 
     @Override
     public ModelType getModelType() {
-        return ModelType.REQUEST;
+        return ModelType.REPOSITORY;
     }
 
     public enum JsonKey {
-        COMMAND("command"),
-        ID("id");
+        BANNER("banner"),
+        MAX_BANNER("maxBanner"),
+        IS_PLANT("isPlant");
 
         String key;
 

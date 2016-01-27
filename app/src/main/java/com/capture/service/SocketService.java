@@ -137,7 +137,7 @@ public class SocketService extends Service {
     }
 
     public void connect(){
-        String token = UserService.getInstance().getUserObject().getUserModul().getTocken();
+        String token = UserService.getInstance().getUserObject().getUserModel().tocken;
         disconnect();
         AsyncHttpGet get = new AsyncHttpGet(SOCKET_URL);
         //get.addHeader("os", "Android");
