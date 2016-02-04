@@ -13,6 +13,7 @@ import android.util.Log;
 import com.bettervectordrawable.Convention;
 import com.bettervectordrawable.VectorDrawableCompat;
 
+import com.capture.buisneslogick.service.RequestService;
 import com.capture.object.ReturnObject;
 import com.capture.object.request.RequestObject;
 import com.capture.service.SocketService;
@@ -91,10 +92,16 @@ public class AppSoket extends Application implements SocketService.OnSocketListn
         mSocketService.connect();
     }
 
+    public void send(JSONObject jsonObject){
+        send(jsonObject, -1, null);
+    }
+
     public void send(JSONObject jsonObject, long id, OnCompliteListern listern) {
         mMessagesList.add(jsonObject);
-        mListner.put(id, listern);
-        mHamdler.postDelayed(new OldRequest(id), 30000);
+        if(listern != null){
+            mListner.put(id, listern);
+            mHamdler.postDelayed(new OldRequest(id), 30000);
+        }
         try {
             send();
         } catch (JSONException e) {
@@ -197,17 +204,12 @@ public class AppSoket extends Application implements SocketService.OnSocketListn
             return;
         }
         RequestObject requestObject = new RequestObject(jsObj);
-        if(returnObject.getReturnModel() != null){
-            requestProcessing(jsObj, requestObject);
+        if(requestObject.getRequestModel() != null){
+            RequestService.getInstance().process(requestObject);
             return;
         }
         // TODO: json объект может быть часть игрового фото
 
-    }
-
-    private void requestProcessing(JSONObject jsObj, RequestObject requestObject){
-        Log.d(LOG_TAG, jsObj.toString());
-        //RequestService.getInstance().processing(jsObj, requestObject);
     }
 
     private void returnProcessing(JSONObject jsObj, ReturnObject returnObject){

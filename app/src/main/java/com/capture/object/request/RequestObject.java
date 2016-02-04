@@ -43,6 +43,7 @@ public class RequestObject extends BaseObject {
 
 
     public enum Command {
+        UNAUTHORIZED("unauthorized"),
         EXIT("exit"),
         CREATE_SCEN("create_scen"),
         CONNECT_SCEN("connect_scen"),
@@ -73,6 +74,8 @@ public class RequestObject extends BaseObject {
                 return CREATE_USER;
             } else if (command.equals(AUTHORIZATION.toString())){
                 return AUTHORIZATION;
+            } else if (command.equals(UNAUTHORIZED.toString())){
+                return UNAUTHORIZED;
             }
             return null;
         }

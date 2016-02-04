@@ -13,7 +13,7 @@ import org.json.JSONObject;
  */
 public class ReturnObject extends BaseObject {
 
-    private ReturnModel returnModel = null;
+    private ReturnModel returnModel = new ReturnModel();
 
     public ReturnObject(){
 
