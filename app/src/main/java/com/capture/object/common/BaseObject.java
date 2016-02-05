@@ -43,6 +43,7 @@ public abstract class BaseObject {
     }
 
     public enum Role {
+        ERROR("error"),
         SCEN("scen"),
         USER("user");
         String role;

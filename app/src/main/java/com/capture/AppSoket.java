@@ -13,7 +13,10 @@ import android.util.Log;
 import com.bettervectordrawable.Convention;
 import com.bettervectordrawable.VectorDrawableCompat;
 
+import com.capture.buisneslogick.service.ErrorService;
 import com.capture.buisneslogick.service.RequestService;
+import com.capture.buisneslogick.service.ReturnService;
+import com.capture.object.ErrorObject;
 import com.capture.object.ReturnObject;
 import com.capture.object.request.RequestObject;
 import com.capture.service.SocketService;
@@ -92,13 +95,9 @@ public class AppSoket extends Application implements SocketService.OnSocketListn
         mSocketService.connect();
     }
 
-    public void send(JSONObject jsonObject){
-        send(jsonObject, -1, null);
-    }
-
     public void send(JSONObject jsonObject, long id, OnCompliteListern listern) {
         mMessagesList.add(jsonObject);
-        if(listern != null){
+        if (listern != null) {
             mListner.put(id, listern);
             mHamdler.postDelayed(new OldRequest(id), 30000);
         }
@@ -164,55 +163,68 @@ public class AppSoket extends Application implements SocketService.OnSocketListn
             jsArr = new JSONArray(s);
         } catch (JSONException e) {
             e.printStackTrace();
+            sendError("parser", e.getMessage());
         }
         // сообщение должен быть json массив
         if (jsArr == null) return;
         arrayProcessing(jsArr);
 
-
         Intent intent = new Intent();
         sendOrderedBroadcast(intent, KeyBroadcast.SOCET_MESSAGE);
     }
 
-    public void disconnect(){
+    private void sendError(String tag, String mess) {
+        ErrorObject errObj = ErrorService.getInstance().create(tag, mess);
+        send(errObj.toJSONObject(), errObj.getGeneralModel().idObject, new OnCompliteListern() {
+            @Override
+            public void onComplite(JSONObject jsObj, ReturnObject returnObject) {
+                //не нужен ответ
+            }
+        });
+    }
+
+    public void disconnect() {
         mSocketService.disconnect();
     }
 
-    private void arrayProcessing(JSONArray jsArr){
+    private void arrayProcessing(JSONArray jsArr) {
         for (int i = 0; i < jsArr.length(); i++) {
             JSONObject jsObj = null;
-
             try {
                 jsObj = jsArr.getJSONObject(i);
             } catch (JSONException e) {
                 e.printStackTrace();
+                sendError("parser", e.getMessage());
             }
 
             // массив состоит из json объектов (моделей)
             if (jsObj != null) {
                 objectProcessing(jsObj);
-
             }
         }
     }
 
-    private void objectProcessing(JSONObject jsObj){
+    private void objectProcessing(JSONObject jsObj) {
 
-        ReturnObject returnObject = new ReturnObject(jsObj);
-        if(returnObject.getReturnModel() != null){
+        if (ReturnService.getInstance().isReturnObject(jsObj)) {
+            ReturnObject returnObject = new ReturnObject(jsObj);
             returnProcessing(jsObj, returnObject);
-            return;
+        } else if (RequestService.getInstance().isRequestObject(jsObj)) {
+            RequestObject requestObject = new RequestObject(jsObj);
+            ReturnObject returnObj = RequestService.getInstance().process(requestObject);
+            send(returnObj.toJSONObject(), returnObj.getReturnModel().idRequest, new OnCompliteListern() {
+                @Override
+                public void onComplite(JSONObject jsObj, ReturnObject returnObject) {
+                    //не нужен ответ
+                }
+            });
+        } else {
+            // TODO: json объект может быть часть игрового фото
         }
-        RequestObject requestObject = new RequestObject(jsObj);
-        if(requestObject.getRequestModel() != null){
-            RequestService.getInstance().process(requestObject);
-            return;
-        }
-        // TODO: json объект может быть часть игрового фото
 
     }
 
-    private void returnProcessing(JSONObject jsObj, ReturnObject returnObject){
+    private void returnProcessing(JSONObject jsObj, ReturnObject returnObject) {
         long idRequest = returnObject.getReturnModel().idRequest;
         OnCompliteListern listern = mListner.remove(idRequest);
         if (listern != null) {

@@ -22,9 +22,10 @@ public class ReturnObject extends BaseObject {
     public ReturnObject(JSONObject jsObj){
         try {
             JSONObject jsReturn = jsObj.getJSONObject(returnModel.getModelType().toString());
-            returnModel = ParserReturn.pars(jsReturn);
+            returnModel = ParserReturn.pars(jsObj);
         } catch (JSONException e) {
             e.printStackTrace();
+            returnModel = null;
         }
     }
 

@@ -13,7 +13,7 @@ import org.json.JSONObject;
  */
 public class RequestObject extends BaseObject {
 
-    private RequestModel requestModel = null;
+    private RequestModel requestModel = new RequestModel();
 
     public RequestObject(){
 
@@ -25,6 +25,7 @@ public class RequestObject extends BaseObject {
             requestModel = ParserRequest.pars(jsRequest);
         } catch (JSONException e) {
             e.printStackTrace();
+            requestModel = null;
         }
     }
 
