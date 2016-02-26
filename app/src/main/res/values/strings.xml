@@ -3,6 +3,7 @@
     <string name="app_name">Capture</string>
 
     <string name="menu_main_about">About</string>
+    <string name="menu_main_disconect">Disconect</string>
     <string name="menu_main_login">Log in</string>
     <string name="menu_main_registr">Registr</string>
     <string name="menu_main_profile">Profile</string>

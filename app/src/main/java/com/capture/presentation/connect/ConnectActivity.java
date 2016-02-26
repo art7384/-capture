@@ -47,9 +47,13 @@ public class ConnectActivity extends BaseActivity implements View.OnClickListene
     @Override
     protected void onConnect() {
         super.onConnect();
-        mTxtStatus.setText(R.string.socket_status_сonnect);
-        mBtn.setEnabled(true);
-        mBtn.setText(R.string.btn_ok);
+
+        startActivity(new Intent(this, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+        finish();
+
+//        mTxtStatus.setText(R.string.socket_status_сonnect);
+//        mBtn.setEnabled(true);
+//        mBtn.setText(R.string.btn_ok);
     }
 
     @Override

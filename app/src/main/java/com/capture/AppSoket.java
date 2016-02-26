@@ -143,8 +143,12 @@ public class AppSoket extends Application implements SocketService.OnSocketListn
 
     @Override
     public void onCompleted(Exception e) {
+        String mess = "disconect";
+        if(e != null && e.getMessage() != null){
+            mess = e.getMessage();
+        }
         Intent intent = new Intent();
-        intent.putExtra(KeyExtra.MESSAGE.toString(), e.getMessage());
+        intent.putExtra(KeyExtra.MESSAGE.toString(), mess);
         intent.putExtra(KeyExtra.COMMAND.toString(), KeyEvent.COMPLITED);
         sendOrderedBroadcast(intent, KeyBroadcast.SOCET_UPDATE);
     }

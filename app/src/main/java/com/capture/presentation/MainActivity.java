@@ -78,6 +78,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
 
         switch (id) {
+            case R.id.action_disconect: {
+                AppSoket.getInstance().disconnect();
+                startActivity(new Intent(this, ConnectActivity.class));
+                finish();
+                return true;
+            }
             case R.id.action_profile: {
                 startActivity(new Intent(this, ProfileActivity.class));
                 return true;
