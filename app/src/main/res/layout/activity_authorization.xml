@@ -30,6 +30,7 @@
         android:maxLength="16"/>
 
     <Button
+        android:id="@+id/activityAuthorization_EditText_ok"
         android:text="@string/btn_ok"
         android:layout_margin="32dp"
         android:layout_width="match_parent"

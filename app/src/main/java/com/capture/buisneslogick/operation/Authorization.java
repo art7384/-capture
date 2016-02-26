@@ -4,16 +4,16 @@ import com.capture.AppSoket;
 import com.capture.buisneslogick.transport.OnCompliteListner;
 import com.capture.buisneslogick.transport.OnErrorTransportListner;
 import com.capture.object.ReturnObject;
-import com.capture.object.request.RegistrationRequestObject;
+import com.capture.object.request.AuthorizationRequestObject;
 
 import org.json.JSONObject;
 
 /**
- * Created by artem on 26.01.16.
+ * Created by artem on 26.02.16.
  */
-public class Registration {
-    public static void registration(
-            RegistrationRequestObject object,
+public class Authorization {
+    public static void authorization(
+            AuthorizationRequestObject object,
             final OnCompliteListner listner,
             final OnErrorTransportListner errorListner) {
 
@@ -32,5 +32,4 @@ public class Registration {
                 }
         );
     }
-
 }
