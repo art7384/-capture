@@ -2,12 +2,14 @@ package com.capture.presentation.registration;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.capture.AppSoket;
 import com.capture.R;
+import com.capture.buisneslogick.helpers.Md5Convector;
 import com.capture.buisneslogick.service.UserService;
 import com.capture.buisneslogick.transport.OnErrorTransportListner;
 import com.capture.model.UserModel;
@@ -30,6 +32,7 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
     private EditText mEdPass;
     private EditText mEdPass2;
     private Button mBtOk;
+    private Handler mHandler = new Handler();
 
     private OnCompliteListner mOnCompliteListner = new OnCompliteListner() {
         @Override
@@ -49,11 +52,21 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
             String txt = returnObject.getReturnModel().text;
             switch (staus) {
                 case 403: {
-                    DialogFactory.showError(RegistrationActivity.this, getString(R.string.dialog_email_exists));
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            DialogFactory.showError(RegistrationActivity.this, getString(R.string.dialog_email_exists));
+                        }
+                    });
                     break;
                 }
                 case 409: {
-                    DialogFactory.showError(RegistrationActivity.this, getString(R.string.dialog_nickname_is_not_available));
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            DialogFactory.showError(RegistrationActivity.this, getString(R.string.dialog_nickname_is_not_available));
+                        }
+                    });
                     break;
                 }
                 default: {
@@ -98,11 +111,10 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
 
     /* ====== HELPERS ===== */
 
-    private UserModel createUserModel() {
+    private UserModel createUserModel() throws NoSuchAlgorithmException {
         UserModel user = new UserModel();
-        user.password = mEdPass.getText().toString();
+        user.password = Md5Convector.md5(mEdPass.getText().toString());
         user.email = mEdEmail.getText().toString();
-        String nick = mEdNick.getText().toString();
         return user;
     }
 
@@ -137,15 +149,20 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void registration() {
-        UserModel user = createUserModel();
+        UserModel user = null;
+        try {
+            user = createUserModel();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        if(user == null){
+            mEdPass.setError(getString(R.string.ed_invalid));
+            return;
+        }
         String nick = mEdNick.getText().toString();
         try {
             showProgressDialog(getString(R.string.title_registration));
             UserService.getInstance().registration(user, nick, mOnCompliteListner, mOnErrorTransportListner);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            mEdPass.setError(getString(R.string.ed_invalid));
-            DialogFactory.showError(this, e.getMessage());
         } catch (JSONException e) {
             e.printStackTrace();
             DialogFactory.showError(this, e.getMessage());

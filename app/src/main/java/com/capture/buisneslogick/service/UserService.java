@@ -37,7 +37,7 @@ public class UserService {
             UserModel userModel,
             String nick,
             OnCompliteListner listern,
-            OnErrorTransportListner errorListner) throws NoSuchAlgorithmException, JSONException {
+            OnErrorTransportListner errorListner) throws JSONException {
 
 
         RegistrationRequestObject registractionRequestObject = CreaterRegistrationRequestObject.create(userModel, nick);
@@ -47,7 +47,7 @@ public class UserService {
     public void authorization(
             UserModel userModel,
             OnCompliteListner listern,
-            OnErrorTransportListner errorListner) throws NoSuchAlgorithmException, JSONException {
+            OnErrorTransportListner errorListner) throws JSONException {
 
         AuthorizationRequestObject authorizationObj = CreaterAuthorizationRequestObject.create(userModel);
         Authorization.authorization(authorizationObj, listern, errorListner);

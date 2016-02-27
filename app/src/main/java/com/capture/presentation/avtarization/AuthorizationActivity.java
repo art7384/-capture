@@ -1,12 +1,14 @@
 package com.capture.presentation.avtarization;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.capture.AppSoket;
 import com.capture.R;
+import com.capture.buisneslogick.helpers.Md5Convector;
 import com.capture.buisneslogick.service.UserService;
 import com.capture.buisneslogick.transport.OnCompliteListner;
 import com.capture.buisneslogick.transport.OnErrorTransportListner;
@@ -27,6 +29,7 @@ public class AuthorizationActivity extends BaseActivity implements View.OnClickL
     private EditText mEdEmail;
     private EditText mEdPass;
     private Button mBtOk;
+    private Handler mHandler = new Handler();
 
     private OnCompliteListner mOnCompliteListner = new OnCompliteListner() {
         @Override
@@ -41,15 +44,27 @@ public class AuthorizationActivity extends BaseActivity implements View.OnClickL
         public void onError(ReturnObject returnObject) {
             cancelProgressDialog();
             if (AuthorizationActivity.this == null) return;
-            int staus = returnObject.getReturnModel().status;
-            String txt = returnObject.getReturnModel().text;
+            final int staus = returnObject.getReturnModel().status;
+            final String txt = returnObject.getReturnModel().text;
             switch (staus) {
                 case 404: {
-                    DialogFactory.showError(AuthorizationActivity.this, getString(R.string.dialog_login_error));
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            DialogFactory.showError(AuthorizationActivity.this, getString(R.string.dialog_login_error));
+                        }
+                    });
+
                     break;
                 }
                 default: {
-                    DialogFactory.showError(AuthorizationActivity.this, "" + staus + ": " + txt);
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            DialogFactory.showError(AuthorizationActivity.this, "" + staus + ": " + txt);
+                        }
+                    });
+
                     break;
                 }
             }
@@ -105,14 +120,19 @@ public class AuthorizationActivity extends BaseActivity implements View.OnClickL
     }
 
     private void avtorization() {
-        UserModel user = createUserModel();
+        UserModel user = null;
+        try {
+            user = createUserModel();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        if(user == null){
+            mEdPass.setError(getString(R.string.ed_invalid));
+            return;
+        }
         try {
             showProgressDialog(getString(R.string.title_authorization));
             UserService.getInstance().authorization(user, mOnCompliteListner, mOnErrorTransportListner);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            mEdPass.setError(getString(R.string.ed_invalid));
-            DialogFactory.showError(this, e.getMessage());
         } catch (JSONException e) {
             e.printStackTrace();
             DialogFactory.showError(this, e.getMessage());
@@ -121,9 +141,9 @@ public class AuthorizationActivity extends BaseActivity implements View.OnClickL
 
     /* ====== HELPERS ===== */
 
-    private UserModel createUserModel() {
+    private UserModel createUserModel() throws NoSuchAlgorithmException {
         UserModel user = new UserModel();
-        user.password = mEdPass.getText().toString();
+        user.password = Md5Convector.md5(mEdPass.getText().toString());
         user.email = mEdEmail.getText().toString();
         return user;
     }

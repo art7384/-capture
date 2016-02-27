@@ -34,7 +34,7 @@
     <string name="dialog_title_error">Error!</string>
     <string name="dialog_title_attention">Attention!</string>
     <string name="dialog_email_exists">A user with this e-mail is already registered</string>
-    <string name="dialog_login_error">pair уьфшд and password do not match</string>
+    <string name="dialog_login_error">Pair email and password do not match</string>
     <string name="dialog_nickname_is_not_available">Nickname is not available</string>
     <string name="dialog_login_or_register">You must log in or register</string>
     <string name="dialog_btn_login">Log in</string>
