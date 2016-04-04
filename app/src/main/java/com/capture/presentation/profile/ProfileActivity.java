@@ -5,7 +5,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.capture.AppSoket;
+import com.capture.AppSoketTest;
 import com.capture.R;
 import com.capture.buisneslogick.persisten.UserProfile;
 import com.capture.object.UserObject;
@@ -39,7 +39,7 @@ public class ProfileActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (!AppSoket.getInstance().isConnect()) {
+        if (!AppSoketTest.getInstance().isConnect()) {
             finish();
         }
     }
@@ -67,7 +67,7 @@ public class ProfileActivity extends BaseActivity {
 
     private void exit(){
         UserProfile.getInstance().exit();
-        AppSoket.getInstance().disconnect();
+        AppSoketTest.getInstance().disconnect();
         finish();
     }
 

@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.capture.AppSoket;
+import com.capture.AppSoketTest;
 import com.capture.R;
 import com.capture.presentation.MainActivity;
 import com.capture.presentation.common.BaseActivity;
@@ -78,11 +78,11 @@ public class ConnectActivity extends BaseActivity implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.activityConnect_Button_connect: {
-                if (AppSoket.getInstance().isConnect()) {
+                if (AppSoketTest.getInstance().isConnect()) {
                     startActivity(new Intent(this, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     finish();
                 } else {
-                    AppSoket.getInstance().connectSocet();
+                    AppSoketTest.getInstance().connectSocet();
                     onConnection();
                 }
                 break;
@@ -93,7 +93,7 @@ public class ConnectActivity extends BaseActivity implements View.OnClickListene
     /* ====== FUNCTION ===== */
 
     public void updateStatus() {
-        if (AppSoket.getInstance().isConnect()) {
+        if (AppSoketTest.getInstance().isConnect()) {
             onConnect();
         } else {
             onDisconnect();

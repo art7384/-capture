@@ -1,6 +1,6 @@
 package com.capture.buisneslogick.operation;
 
-import com.capture.AppSoket;
+import com.capture.AppSoketTest;
 import com.capture.buisneslogick.transport.OnCompliteListner;
 import com.capture.buisneslogick.transport.OnErrorTransportListner;
 import com.capture.object.ReturnObject;
@@ -17,10 +17,10 @@ public class Authorization {
             final OnCompliteListner listner,
             final OnErrorTransportListner errorListner) {
 
-        AppSoket.getInstance().send(
+        AppSoketTest.getInstance().send(
                 object.toJSONObject(),
                 object.getRequestModel().idRequest,
-                new AppSoket.OnCompliteListern() {
+                new AppSoketTest.OnCompliteListern() {
                     @Override
                     public void onComplite(JSONObject jsObj, ReturnObject returnObject) {
                         if((returnObject.getReturnModel().status / 100) == 2){

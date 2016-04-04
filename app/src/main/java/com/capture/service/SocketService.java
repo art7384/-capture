@@ -10,7 +10,7 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.capture.AppSoket;
+import com.capture.AppSoketTest;
 import com.capture.buisneslogick.service.UserService;
 import com.koushikdutta.async.ByteBufferList;
 import com.koushikdutta.async.DataEmitter;
@@ -145,8 +145,8 @@ public class SocketService extends Service {
         //get.addHeader("sdk", "" + Build.VERSION.SDK_INT);
         //get.addHeader("model", Build.MODEL);
         //get.addHeader("manufacturer", Build.MANUFACTURER);
-        get.addHeader("app-version-name", AppSoket.getInstance().getPackageInfo().versionName);
-        get.addHeader("app-version-code", "" + AppSoket.getInstance().getPackageInfo().versionCode);
+        get.addHeader("app-version-name", AppSoketTest.getInstance().getPackageInfo().versionName);
+        get.addHeader("app-version-code", "" + AppSoketTest.getInstance().getPackageInfo().versionCode);
         get.addHeader("token", token);
         AsyncHttpClient.getDefaultInstance().websocket(get, "http", mWebSocketConnectCallback);
     }

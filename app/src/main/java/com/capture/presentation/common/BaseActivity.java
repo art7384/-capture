@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-import com.capture.AppSoket;
+import com.capture.AppSoketTest;
 import com.capture.R;
 import com.capture.presentation.avtarization.AuthorizationActivity;
 import com.capture.presentation.registration.RegistrationActivity;
@@ -25,7 +25,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        registerReceiver(mReceiver, new IntentFilter(AppSoket.KeyBroadcast.SOCET_UPDATE));
+        registerReceiver(mReceiver, new IntentFilter(AppSoketTest.KeyBroadcast.SOCET_UPDATE));
     }
 
     @Override
@@ -71,14 +71,14 @@ public class BaseActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            int event = intent.getIntExtra(AppSoket.KeyExtra.COMMAND.toString(), -1);
-            if (event == AppSoket.KeyEvent.CONNECT) {
+            int event = intent.getIntExtra(AppSoketTest.KeyExtra.COMMAND.toString(), -1);
+            if (event == AppSoketTest.KeyEvent.CONNECT) {
                 onConnect();
-            } else if (event == AppSoket.KeyEvent.COMPLITED) {
-                String mess = intent.getStringExtra(AppSoket.KeyExtra.MESSAGE.toString());
+            } else if (event == AppSoketTest.KeyEvent.COMPLITED) {
+                String mess = intent.getStringExtra(AppSoketTest.KeyExtra.MESSAGE.toString());
                 onErrorConnection(mess);
-            } else if (event == AppSoket.KeyEvent.ERROR_CONNECT) {
-                String mess = intent.getStringExtra(AppSoket.KeyExtra.MESSAGE.toString());
+            } else if (event == AppSoketTest.KeyEvent.ERROR_CONNECT) {
+                String mess = intent.getStringExtra(AppSoketTest.KeyExtra.MESSAGE.toString());
                 onErrorConnection(mess);
             }
         }

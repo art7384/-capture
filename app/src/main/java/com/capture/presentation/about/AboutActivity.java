@@ -3,7 +3,7 @@ package com.capture.presentation.about;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import com.capture.AppSoket;
+import com.capture.AppSoketTest;
 import com.capture.R;
 import com.capture.presentation.common.BaseActivity;
 
@@ -20,9 +20,9 @@ public class AboutActivity extends BaseActivity {
         setContentView(R.layout.activity_about);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mTxtVersion = (TextView) findViewById(R.id.activityAbout_TextView_version);
-        mTxtVersion.setText(AppSoket.getInstance().getPackageInfo().versionName
+        mTxtVersion.setText(AppSoketTest.getInstance().getPackageInfo().versionName
                 + "("
-                + AppSoket.getInstance().getPackageInfo().versionCode
+                + AppSoketTest.getInstance().getPackageInfo().versionCode
                 + ")");
     }
 }
