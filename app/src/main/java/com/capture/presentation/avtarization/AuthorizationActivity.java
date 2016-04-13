@@ -35,7 +35,7 @@ public class AuthorizationActivity extends BaseActivity implements View.OnClickL
         @Override
         public void onComplite() {
             cancelProgressDialog();
-            if (AuthorizationActivity.this == null) return;
+            finish();
         }
     };
 

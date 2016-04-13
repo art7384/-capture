@@ -2,6 +2,7 @@ package com.capture.buisneslogick.convector.parser;
 
 import android.util.Log;
 
+import com.capture.model.GeneralModel;
 import com.capture.model.UserModel;
 
 import org.json.JSONException;
@@ -24,6 +25,11 @@ public class ParserUser {
             model.token = jsonObject.getString(UserModel.JsonKey.TOKEN.toString());
         } else {
             Log.w(LOG_TAG, "No value for " + UserModel.JsonKey.TOKEN.toString());
+        }
+        if (!jsonObject.isNull(UserModel.JsonKey.PASSWORD.toString())) {
+            model.password = jsonObject.getString(UserModel.JsonKey.PASSWORD.toString());
+        } else {
+            Log.w(LOG_TAG, "No value for " + UserModel.JsonKey.PASSWORD.toString());
         }
         return model;
     }

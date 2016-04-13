@@ -221,7 +221,8 @@ public class AppSoket extends Application implements OnSocketListner {
                 }
             });
         } else {
-            // TODO: json объект может быть часть игрового фото
+            // пришол объект системы для синхронизации
+            returnProcessing(jsObj);
         }
 
     }
@@ -235,6 +236,9 @@ public class AppSoket extends Application implements OnSocketListner {
         }
     }
 
+    private void returnProcessing(JSONObject jsObj) {
+        //запускаем сервис синхронизации
+    }
 
     @Override
     public void onErrorConnect(Exception e) {

@@ -6,6 +6,7 @@ import com.capture.buisneslogick.convector.parser.ParserRequest;
 import com.capture.model.RequestModel;
 import com.capture.object.UserObject;
 import com.capture.object.request.RequestObject;
+import com.capture.service.soket.helpers.CreateReturnAuthorization;
 import com.capture.service.soket.helpers.CreateReturnCreateUser;
 import com.capture.service.soket.helpers.ImulyatorSocketHelper;
 
@@ -72,9 +73,16 @@ public class ImulyatorSocketService extends BaseSocketService {
         if(requestObject.getRequestModel() != null){
             // в зависимости от запроса формируем ответ
             switch (requestObject.getRequestModel().command) {
-                case AUTHORIZATION:
+                case AUTHORIZATION: {
+
+                    // [0,{"request":{"command":"authorization","id":1460537932851},"user":{"email":"art@mail.com","password":"efe6398127928f1b2e9ef3207fb82663"}}]
+
+                    UserObject userObject = new UserObject(jsObjMess);
+                    String returns = CreateReturnAuthorization.create(requestObject, userObject);
+                    imulatorWebSocketStringCallbacknew(returns);
 
                     break;
+                }
                 case UNAUTHORIZED:
 
                     break;
@@ -90,14 +98,16 @@ public class ImulyatorSocketService extends BaseSocketService {
                 case GET_SCEN:
 
                     break;
-                case CREATE_USER:
-                     /*
-        [0,{"request":{"command":"create_user","id":1460489142635},"general":{"name":"artem","role":"user"},"user":{"email":"art7384@gmail.com","password":"efe6398127928f1b2e9ef3207fb82663"}}]
-    */
+                case CREATE_USER: {
+
+                    // [0,{"request":{"command":"create_user","id":1460489142635},"general":{"name":"artem","role":"user"},"user":{"email":"art7384@gmail.com","password":"efe6398127928f1b2e9ef3207fb82663"}}]
+
                     UserObject userObject = new UserObject(jsObjMess);
                     String returns = CreateReturnCreateUser.create(requestObject, userObject);
                     imulatorWebSocketStringCallbacknew(returns);
+
                     break;
+                }
             }
         }
 
