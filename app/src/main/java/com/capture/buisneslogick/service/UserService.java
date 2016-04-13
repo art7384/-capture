@@ -14,8 +14,6 @@ import com.capture.model.UserModel;
 
 import org.json.JSONException;
 
-import java.security.NoSuchAlgorithmException;
-
 /**
  * Created by artem on 06.01.16.
  */
@@ -59,7 +57,7 @@ public class UserService {
 
     public boolean isAuthorization() {
         if(getUserObject().getUserModel() == null) return false;
-        String token = getUserObject().getUserModel().tocken;
+        String token = getUserObject().getUserModel().token;
         return token != null;
     }
 }

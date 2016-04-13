@@ -13,7 +13,7 @@ public class UserConvector {
         JSONObject jsonObject = new JSONObject();
         if (model.email != null) jsonObject.put(UserModel.JsonKey.EMAIL.toString(), model.email);
         if (model.password != null) jsonObject.put(UserModel.JsonKey.PASSWORD.toString(), model.password);
-        if (model.tocken != null) jsonObject.put(UserModel.JsonKey.TOKEN.toString(), model.tocken);
+        if (model.token != null) jsonObject.put(UserModel.JsonKey.TOKEN.toString(), model.token);
         return jsonObject;
     }
 

@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.capture.AppSoketTest;
+import com.capture.AppSoket;
 import com.capture.R;
 import com.capture.buisneslogick.helpers.Md5Convector;
 import com.capture.buisneslogick.service.UserService;
@@ -38,8 +38,7 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
         @Override
         public void onComplite() {
             cancelProgressDialog();
-            if (RegistrationActivity.this == null) return;
-
+            finish();
         }
     };
 
@@ -96,7 +95,7 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
     @Override
     protected void onResume() {
         super.onResume();
-        if (!AppSoketTest.getInstance().isConnect()) {
+        if (!AppSoket.getInstance().isConnect()) {
             finish();
         }
     }

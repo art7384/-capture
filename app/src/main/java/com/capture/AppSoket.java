@@ -10,16 +10,16 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.bettervectordrawable.Convention;
-import com.bettervectordrawable.VectorDrawableCompat;
-
 import com.capture.buisneslogick.service.ErrorService;
 import com.capture.buisneslogick.service.RequestService;
 import com.capture.buisneslogick.service.ReturnService;
 import com.capture.object.ErrorObject;
 import com.capture.object.ReturnObject;
 import com.capture.object.request.RequestObject;
-import com.capture.service.SocketService;
+import com.capture.service.soket.ImulyatorSocketService;
+import com.capture.service.soket.SocketService;
+import com.capture.service.soket.WebSocketService;
+import com.capture.service.soket.event.OnSocketListner;
 import com.koushikdutta.async.ByteBufferList;
 import com.koushikdutta.async.DataEmitter;
 
@@ -35,7 +35,7 @@ import java.util.Map;
 /**
  * Created by artem on 29.12.15.
  */
-public class AppSoket extends Application implements SocketService.OnSocketListner {
+public class AppSoket extends Application implements OnSocketListner {
 
     private static final String LOG_TAG = "AppSoket";
     static private AppSoket sInstance = null;
@@ -47,7 +47,7 @@ public class AppSoket extends Application implements SocketService.OnSocketListn
 
     private ServiceConnection mServiceConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName name, IBinder binder) {
-            mSocketService = ((SocketService.SocketBinder) binder).getService();
+            mSocketService = ((ImulyatorSocketService.SocketBinder) binder).getService();
             mSocketService.setOnSocketListner(AppSoket.getInstance());
         }
 
@@ -60,12 +60,8 @@ public class AppSoket extends Application implements SocketService.OnSocketListn
     public void onCreate() {
         super.onCreate();
 
-        //Подключаем поддержку векторных изображений на Android4 (вектор поддерживается с Android 5)
-        int[] ids = VectorDrawableCompat.findVectorResourceIdsByConvention(getResources(), R.drawable.class, Convention.RESOURCE_NAME_HAS_VECTOR_SUFFIX/*.ResourceNameHasVectorSuffix*/);
-        VectorDrawableCompat.enableResourceInterceptionFor(getResources(), ids);
-
         sInstance = this;
-        Intent intent = new Intent(this, SocketService.class);
+        Intent intent = new Intent(this, ImulyatorSocketService.class);
         bindService(intent, mServiceConnection, BIND_AUTO_CREATE);
     }
 
@@ -87,7 +83,9 @@ public class AppSoket extends Application implements SocketService.OnSocketListn
     }
 
     public boolean isConnect() {
-        if (mSocketService == null) return false;
+        if (mSocketService == null) {
+            return false;
+        }
         return mSocketService.isConnect();
     }
 

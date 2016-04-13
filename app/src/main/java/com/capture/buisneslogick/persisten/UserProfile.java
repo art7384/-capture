@@ -3,7 +3,7 @@ package com.capture.buisneslogick.persisten;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.capture.AppSoketTest;
+import com.capture.AppSoket;
 import com.capture.model.GeneralModel;
 import com.capture.model.UserModel;
 import com.capture.object.UserObject;
@@ -21,7 +21,7 @@ public class UserProfile {
     SharedPreferences.Editor ed;
 
     private UserProfile() {
-        Context context = AppSoketTest.getInstance().getBaseContext();
+        Context context = AppSoket.getInstance().getBaseContext();
         sPref = context.getSharedPreferences("capture", context.MODE_PRIVATE);
         ed = sPref.edit();
     }
@@ -44,7 +44,7 @@ public class UserProfile {
         GeneralModel generalModel = user.getGeneralModel();
         putId(generalModel.idObject);
         putName(generalModel.nameObject);
-        putToken(userModel.tocken);
+        putToken(userModel.token);
         putEmail(userModel.email);
     }
 
@@ -55,7 +55,7 @@ public class UserProfile {
         GeneralModel generalModel = new GeneralModel();
 
         userModel.email = getEmail();
-        userModel.tocken = getToken();
+        userModel.token = getToken();
         generalModel.idObject = getId();
         generalModel.nameObject = getName();
         generalModel.role = BaseObject.Role.USER;

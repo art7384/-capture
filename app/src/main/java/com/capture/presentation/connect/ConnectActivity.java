@@ -1,16 +1,12 @@
 package com.capture.presentation.connect;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.capture.AppSoketTest;
+import com.capture.AppSoket;
 import com.capture.R;
 import com.capture.presentation.MainActivity;
 import com.capture.presentation.common.BaseActivity;
@@ -78,11 +74,11 @@ public class ConnectActivity extends BaseActivity implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.activityConnect_Button_connect: {
-                if (AppSoketTest.getInstance().isConnect()) {
+                if (AppSoket.getInstance().isConnect()) {
                     startActivity(new Intent(this, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     finish();
                 } else {
-                    AppSoketTest.getInstance().connectSocet();
+                    AppSoket.getInstance().connectSocet();
                     onConnection();
                 }
                 break;
@@ -93,7 +89,7 @@ public class ConnectActivity extends BaseActivity implements View.OnClickListene
     /* ====== FUNCTION ===== */
 
     public void updateStatus() {
-        if (AppSoketTest.getInstance().isConnect()) {
+        if (AppSoket.getInstance().isConnect()) {
             onConnect();
         } else {
             onDisconnect();

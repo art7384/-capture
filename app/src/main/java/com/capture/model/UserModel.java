@@ -6,7 +6,7 @@ package com.capture.model;
 public class UserModel extends BaseModel {
     public String email = null;
     public String password = null;
-    public String tocken = null;
+    public String token = null;
 
     @Override
     public ModelType getModelType() {
